@@ -278,18 +278,21 @@
                 });
                 $wjq('.dayView').click(function(){
                     calendar.fullCalendar('changeView','resourceDay');
-                    var currentCalendarDate = calendar.fullCalendar('getDate');
-                    $wjq('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
-                    var dayOfWeek = moment(currentCalendarDate).format('dddd');
-                    var dayofMonth = moment(currentCalendarDate).format('M/D');
-                    $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
-               
+                    setTimeout(function(){
+                        var currentCalendarDate = calendar.fullCalendar('getDate');
+                        $wjq('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
+                        var dayOfWeek = moment(currentCalendarDate).format('dddd');
+                        var dayofMonth = moment(currentCalendarDate).format('M/D');
+                        $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
+                    },50); 
                 });
                 $wjq(".fc-agenda-divider.fc-widget-header").after("<div class='filter-section'></div>");
                 $wjq('.filter-section').css('height',$wjq('.filter-section').next().height() - 2 +"px");
                 $wjq('.filter-section').html('<p class="filter-title">FILTERS</p>');
+                var expanded = false;
                 $wjq('.filter-section').click(function(){
-                
+                    $wjq('.filter-section').animate(expanded?{width:'30px'} : {width:'200px'},500);
+                    expanded = !expanded;
                 });
 
                 $wjq('#datepicker').datepicker({
@@ -299,6 +302,7 @@
                     changeYear: true,
                     showOn: 'button',
                 });
+
             },100);
 
        });
