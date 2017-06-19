@@ -102,6 +102,45 @@
         });     
         css_link.appendTo('head');
     }
+    /******** Create Filters ***********/
+    var filters = [];
+    var filterObj = {
+        header : 'Location',
+        options : ['Satelite','Gotham City','Tales']
+    };    
+    filters.push(filterObj);
+    filterObj = {
+        header : 'Sample',
+        options : ['Option 1','Option 2','Option 3','Option 4']
+    };    
+    filters.push(filterObj);
+    function calendarFilter($wjq){
+        $wjq(".fc-agenda-divider.fc-widget-header").after("<div class='filter-section'></div>");
+        buildFilterBody($wjq);
+        var expanded = false;
+        $wjq('.filter-label-outer').click(function(){
+            $wjq('.filter-section').animate(expanded?{'marginLeft':'-220px'} : {marginLeft:'0px'},500);
+            expanded = !expanded;
+        });
+    }
+    function buildFilterBody($wjq){
+        $wjq('.filter-section').html('<div class="filter-container"></div>');
+        $wjq('.filter-container').after('<div class="filter-label-outer"><div class="filter-label">FILTERS</div></div>');
+        for(var i=0;i<filters.length;i++){
+            $wjq('.filter-container').append('<div class="filter_'+i+' filter-header-container" onclick="buildFilterOptions('+i+')"></div>');
+            $wjq('.filter_'+i).html('<div class="filter-title">'+filters[i].header+'</div>')
+            $wjq('.filter_'+i).append(' <span class="filter-nav-icon"></span>');
+        }
+        $wjq('.filter-section').css('height',$wjq('.filter-section').next().height() - 2 +"px");  
+    } 
+    function buildFilterOptions(index){
+
+        for(var i=0;i<filters.length;i++){
+            $wjq('.filter-container').append('<div class="option_'+i+' option-header-container" onclick="buildFilterOptions('+i+')"></div>');
+            $wjq('.filter_'+i).html('<div class="filter-title">'+filters[i].header+'</div>')
+            $wjq('.filter_'+i).append(' <span class="filter-nav-icon"></span>');
+        }
+    }
     /******** Our main function ********/
     function main() { 
         jQuery(document).ready(function($wjq) { 
@@ -216,7 +255,8 @@
                             end: new Date(y, m, d, 14, 0),
                             allDay: false,
                             resourceId: 'resource2',
-                            backgroundColor: '#3F51B5'                        },
+                            backgroundColor: '#3F51B5'                        
+                        },
                         {
                             title: 'All Day Event 3',
                             start: new Date(y, m, d),
@@ -234,7 +274,6 @@
                 };    
 
                 var calendar = $wjq('#calendar').fullCalendar(calendarOptions);
-
                 var currentCalendarDate = calendar.fullCalendar('getDate');
                 $wjq('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
 
@@ -253,7 +292,6 @@
                     resourceList.push(newResource);
                     calendar.fullCalendar("addResource",[newResource]);
                 }); 
-
 
                 $wjq('.prevBtn').click(function(){
                     calendar.fullCalendar('prev');
@@ -275,6 +313,7 @@
                 });
                 $wjq('.wkView').click(function(){
                     calendar.fullCalendar('changeView','agendaWeek');
+                    calendarFilter($wjq);
                 });
                 $wjq('.dayView').click(function(){
                     calendar.fullCalendar('changeView','resourceDay');
@@ -284,17 +323,10 @@
                         var dayOfWeek = moment(currentCalendarDate).format('dddd');
                         var dayofMonth = moment(currentCalendarDate).format('M/D');
                         $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
-                    },50); 
+                        calendarFilter($wjq);
+                    },500); 
                 });
-                $wjq(".fc-agenda-divider.fc-widget-header").after("<div class='filter-section'></div>");
-                $wjq('.filter-section').css('height',$wjq('.filter-section').next().height() - 2 +"px");
-                $wjq('.filter-section').html('<p class="filter-title">FILTERS</p>');
-                var expanded = false;
-                $wjq('.filter-section').click(function(){
-                    $wjq('.filter-section').animate(expanded?{width:'30px'} : {width:'200px'},500);
-                    expanded = !expanded;
-                });
-
+                calendarFilter($wjq);
                 $wjq('#datepicker').datepicker({
                     buttonImage: window.location.protocol +"//"+window.location.host+"/WidgetCalendar/images/calendar.png",
                     buttonImageOnly: true,
@@ -302,7 +334,6 @@
                     changeYear: true,
                     showOn: 'button',
                 });
-
             },100);
 
        });
