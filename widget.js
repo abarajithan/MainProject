@@ -88,7 +88,13 @@
             type: "text/javascript", 
             src: window.location.protocol +"//"+window.location.host+"/WidgetCalendar/js/jQuery/jquery-ui-1.8.23.min.js"
         });     
-        css_link.appendTo('head');   
+        css_link.appendTo('head'); 
+
+        css_link = $wjq("<script>", { 
+            type: "text/javascript", 
+            src: window.location.protocol +"//"+window.location.host+"/WidgetCalendar/js/jQuery/jquery-timepicker-1.3.5.min.js"
+        });     
+        css_link.appendTo('head');    
 
         css_link = $wjq("<script>", { 
             type: "text/javascript", 
@@ -331,7 +337,87 @@
                     changeYear: true,
                     showOn: 'button',
                 });
+                 $wjq('#addAppointment').on('click', function() {
+                   // alert("success");
 
+                     $wjq("#appointmentModal").dialog({
+                     modal: true ,
+                     // buttons: {
+                     //     "Save": function () {
+                     //        // alert($("#frm").valid());
+                     //     }
+                    // }
+
+                 });
+                  $wjq("#appointmentModal").dialog('option', 'title', 'Add New Appointment Slot');
+               // $wjq( ".from-timepicker-input" ).timepicker();
+
+               setTimeout(function(){  
+               $wjq( ".from-timepicker-input" ).on("click", function(){
+            
+                $wjq( ".from-timepicker-input" ).timepicker();
+                $wjq( ".from-timepicker-input" ).append('.ui-timepicker-container')
+
+                });
+
+             },300);
+             //   $wjq(".timepicker-input").after("<span>testing</span>");
+             });
+
+            // From date for new appointment
+             $wjq( ".from-datepicker-input" ).datepicker();
+             var selectedFromDate; 
+             $wjq(".from-datepicker-input").on("change",function(){
+                selectedFromDate = $wjq(this).val();
+             });
+             
+              $wjq(".from-up-arrow").on("click",function(){
+                  var date = new Date(selectedFromDate);
+                  date.setDate(date.getDate() + 1);
+                   selectedFromDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+                   $wjq( ".from-datepicker-input" ).val(selectedFromDate);
+              });
+
+              $wjq(".from-down-arrow").on("click",function(){
+                  var date = new Date(selectedFromDate);
+                  date.setDate(date.getDate() - 1);
+                   selectedFromDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+                   $wjq( ".from-datepicker-input" ).val(selectedFromDate);
+              });
+
+             // To date for new appointment
+             $wjq( ".to-datepicker-input" ).datepicker();
+             var selectedToDate; 
+             $wjq(".to-datepicker-input").on("change",function(){
+                selectedToDate = $wjq(this).val();
+             });
+             
+              $wjq(".to-up-arrow").on("click",function(){
+                  var date = new Date(selectedFromDate);
+                  date.setDate(date.getDate() + 1);
+                   selectedToDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+                   $wjq( ".to-datepicker-input" ).val(selectedToDate);
+              });
+              $wjq(".to-down-arrow").on("click",function(){
+                  var date = new Date(selectedToDate);
+                  date.setDate(date.getDate() - 1);
+                   selectedToDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+                   $wjq( ".to-datepicker-input" ).val(selectedToDate);
+              });
+
+              $wjq("#save").click(function(){
+                alert("success");
+                var fromDate = $wjq("#fromDate").val();
+                var fromTime = $wjq("#fromTime").val();
+                var toDate = $wjq("#toDate").val();
+                var toTime = $wjq("#toTime").val();
+                var type = $wjq("#type").val();
+                var capacity = $wjq("#capacity").val();
+                var staff = $wjq("#staff").val();
+                var location = $wjq("#location").val();
+                var notes = $wjq("#notes").val();
+                
+              })
                 $wjq('.filter-header').click(function() { 
                     var id = $wjq(this).parent().attr('id');
                     let flag = $( "#"+id ).hasClass( "open" )
