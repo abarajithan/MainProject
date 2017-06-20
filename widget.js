@@ -101,12 +101,6 @@
             src: window.location.protocol +"//"+window.location.host+"/WidgetCalendar/js/full-calendar/fullcalendar.js" 
         });     
         css_link.appendTo('head');    
-
-        css_link = $wjq("<script>", { 
-            type: "text/javascript", 
-            src: window.location.protocol +"//"+window.location.host+"/WidgetCalendar/js/script.js" 
-        });     
-        css_link.appendTo('head');
     }
     /******** Create Filters ***********/
     var filters = [];
@@ -125,21 +119,28 @@
         buildFilterBody($wjq);
         var expanded = false;
         $wjq('.filter-label-outer').click(function(){
-            $wjq('.filter-section').animate(expanded?{'marginLeft':'-220px'} : {marginLeft:'0px'},500);
+            $wjq('.filter-section').animate(expanded?{'marginLeft':'-225px'} : {marginLeft:'0px'},500);
+            
+            expanded ? $wjq('.filter-slide-icon').removeClass('open') : $wjq('.filter-slide-icon').addClass('open');
             expanded = !expanded;
+
         });
     }
     function buildFilterBody($wjq){
-        $wjq('.filter-section').html('<div class="filter-container"></div>');
-        $wjq('.filter-container').after('<div class="filter-label-outer"><div class="filter-label">FILTERS</div></div>');
+        $wjq('.filter-section').html('<div class="filter-container"></div>'+
+            '<div class="filter-label-outer">'+
+                '<span class="filter-slide-icon"></span>'+
+                '<div class="filter-label">FILTERS'+ 
+                '</div>'+
+            '</div>');
         for(var i=0;i<filters.length;i++){
             $wjq('.filter-container').append(
-                '<div id="filter_'+i+'" class="filter-header-container">'+
-                    '<div class="filter-header cursor">' +
-                        '<div class="filter-title">'+filters[i].header+'</div>' +
-                        '<span class="filter-nav-icon"></span>' +
-                    '</div>' +
-                '</div>');
+            '<div id="filter_'+i+'" class="filter-header-container">'+
+                '<div class="filter-header cursor">' +
+                    '<div class="filter-title">'+filters[i].header+'</div>' +
+                    '<span class="filter-nav-icon"></span>' +
+                '</div>' +
+            '</div>');
         }
         $wjq('.filter-section').css('height',$wjq('.filter-section').next().height() - 2 +"px");  
     } 
@@ -424,6 +425,7 @@
                     if(flag){
                         $wjq(this).parent().children('.option-header-container').remove();
                         $wjq('#'+id).removeClass('open');
+                        $( "#"+id ).find('.filter-nav-icon').removeClass('open');
                     }
                     else{
                         var indices = id.split('_');
@@ -438,11 +440,10 @@
                             '</div>');
                         }
                         $wjq('#'+id).addClass('open');
+                        $( "#"+id ).find('.filter-nav-icon').addClass('open');
                     }
-                });
-                
+                });    
             },100);
-
        });
     }
 })();
