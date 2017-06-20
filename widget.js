@@ -127,20 +127,17 @@
         $wjq('.filter-section').html('<div class="filter-container"></div>');
         $wjq('.filter-container').after('<div class="filter-label-outer"><div class="filter-label">FILTERS</div></div>');
         for(var i=0;i<filters.length;i++){
-            $wjq('.filter-container').append('<div class="filter_'+i+' filter-header-container" onclick="buildFilterOptions('+i+')"></div>');
-            $wjq('.filter_'+i).html('<div class="filter-title">'+filters[i].header+'</div>')
-            $wjq('.filter_'+i).append(' <span class="filter-nav-icon"></span>');
+            $wjq('.filter-container').append(
+                '<div id="filter_'+i+'" class="filter-header-container">'+
+                    '<div class="filter-header cursor">' +
+                        '<div class="filter-title">'+filters[i].header+'</div>' +
+                        '<span class="filter-nav-icon"></span>' +
+                    '</div>' +
+                '</div>');
         }
         $wjq('.filter-section').css('height',$wjq('.filter-section').next().height() - 2 +"px");  
     } 
-    function buildFilterOptions(index){
 
-        for(var i=0;i<filters.length;i++){
-            $wjq('.filter-container').append('<div class="option_'+i+' option-header-container" onclick="buildFilterOptions('+i+')"></div>');
-            $wjq('.filter_'+i).html('<div class="filter-title">'+filters[i].header+'</div>')
-            $wjq('.filter_'+i).append(' <span class="filter-nav-icon"></span>');
-        }
-    }
     /******** Our main function ********/
     function main() { 
         jQuery(document).ready(function($wjq) { 
@@ -334,6 +331,30 @@
                     changeYear: true,
                     showOn: 'button',
                 });
+
+                $wjq('.filter-header').click(function() { 
+                    var id = $wjq(this).parent().attr('id');
+                    let flag = $( "#"+id ).hasClass( "open" )
+                    if(flag){
+                        $wjq(this).parent().children('.option-header-container').remove();
+                        $wjq('#'+id).removeClass('open');
+                    }
+                    else{
+                        var indices = id.split('_');
+                        var index = parseInt(indices[1]);
+                        for(var i=0;i<filters[index].options.length;i++){
+                            $wjq('#'+id).append('<div class="option_'+i+' option-header-container">'+
+                                
+                                    '<label class="cursor option-title">'+
+                                        '<input type="checkbox" name="checkbox" value="value">'+filters[index].options[i]+
+                                    '</label>'+
+                                
+                            '</div>');
+                        }
+                        $wjq('#'+id).addClass('open');
+                    }
+                });
+                
             },100);
 
        });
