@@ -158,6 +158,8 @@
                 var d = date.getDate();
                 var m = date.getMonth();
                 var y = date.getFullYear();
+
+                //var displayDate;
                 
                 var resourceList = [
                         {
@@ -278,6 +280,7 @@
                 };    
 
                 var calendar = $wjq('#calendar').fullCalendar(calendarOptions);
+
                 var currentCalendarDate = calendar.fullCalendar('getDate');
                 $wjq('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
 
@@ -315,6 +318,7 @@
                     $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
                
                 });
+
                 $wjq('.wkView').click(function(){
                     calendar.fullCalendar('changeView','agendaWeek');
                     calendarFilter($wjq);
@@ -337,21 +341,26 @@
                     changeMonth: true,
                     changeYear: true,
                     showOn: 'button',
+                    onSelect: function(date) {
+                      var displayDate = new Date(date);
+                      calendar.fullCalendar( 'gotoDate', displayDate );
+                       $wjq('.headerDate').text(date);
+                       var dayOfWeek = moment(date).format('dddd');
+                       var dayofMonth = moment(date).format('M/D');
+                       $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
+                      
+                    }
                 });
-                 $wjq('#addAppointment').on('click', function() {
-                   // alert("success");
 
+                 $wjq('#addAppointment').on('click', function() {
+                   
                      $wjq("#appointmentModal").dialog({
                      modal: true ,
-                     // buttons: {
-                     //     "Save": function () {
-                     //        // alert($("#frm").valid());
-                     //     }
-                    // }
+                     
 
                  });
                   $wjq("#appointmentModal").dialog('option', 'title', 'Add New Appointment Slot');
-               // $wjq( ".from-timepicker-input" ).timepicker();
+              
 
                setTimeout(function(){  
                $wjq( ".from-timepicker-input" ).on("click", function(){
@@ -362,7 +371,7 @@
                 });
 
              },300);
-             //   $wjq(".timepicker-input").after("<span>testing</span>");
+            
              });
 
             // From date for new appointment
