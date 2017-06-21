@@ -158,8 +158,6 @@
                 var d = date.getDate();
                 var m = date.getMonth();
                 var y = date.getFullYear();
-
-                //var displayDate;
                 
                 var resourceList = [
                         {
@@ -280,7 +278,6 @@
                 };    
 
                 var calendar = $wjq('#calendar').fullCalendar(calendarOptions);
-
                 var currentCalendarDate = calendar.fullCalendar('getDate');
                 $wjq('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
 
@@ -351,71 +348,68 @@
                       
                     }
                 });
-
-                 $wjq('#addAppointment').on('click', function() {
-                   
-                     $wjq("#appointmentModal").dialog({
-                     modal: true ,
-                     
-
-                 });
-                  $wjq("#appointmentModal").dialog('option', 'title', 'Add New Appointment Slot');
-              
-
-               setTimeout(function(){  
-               $wjq( ".from-timepicker-input" ).on("click", function(){
-            
-                $wjq( ".from-timepicker-input" ).timepicker();
-                $wjq( ".from-timepicker-input" ).append('.ui-timepicker-container')
-
                 });
-
-             },300);
-            
+                $wjq('#addAppointment').on('click', function() {
+                    $wjq("#appointmentModal").dialog({
+                    modal: true 
+                });
+                $wjq("#appointmentModal").dialog('option', 'title', 'Add New Appointment Slot');
+                setTimeout(function(){  
+                    $wjq( ".from-timepicker-input" ).on("click", function(){
+                        $wjq( ".from-timepicker-input" ).timepicker();
+                        $wjq( ".from-timepicker-input" ).after($wjq('.ui-timepicker-container'));
+                        $wjq('.ui-timepicker-container').css('top',$wjq( ".from-timepicker-input" ).offset().top - 70 +'px');
+                        $wjq('.ui-timepicker-container').css('left',$wjq( ".from-timepicker-input" ).offset().left -520 +'px');
+                    });
+                    $wjq( ".to-timepicker-input" ).on("click", function(){
+                        $wjq( ".to-timepicker-input" ).timepicker();
+                        $wjq( ".to-timepicker-input" ).after($wjq('.ui-timepicker-container'));
+                        $wjq('.ui-timepicker-container').css('top',$wjq(".to-timepicker-input").offset().top - 70 +'px');
+                        $wjq('.ui-timepicker-container').css('left',$wjq(".to-timepicker-input").offset().left -520 +'px');
+                    });
+                },300);
+             
              });
-
             // From date for new appointment
-             $wjq( ".from-datepicker-input" ).datepicker();
-             var selectedFromDate; 
-             $wjq(".from-datepicker-input").on("change",function(){
+            $wjq( ".from-datepicker-input" ).datepicker();
+            var selectedFromDate; 
+            $wjq(".from-datepicker-input").on("change",function(){
                 selectedFromDate = $wjq(this).val();
-             });
-             
-              $wjq(".from-up-arrow").on("click",function(){
-                  var date = new Date(selectedFromDate);
-                  date.setDate(date.getDate() + 1);
-                   selectedFromDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
-                   $wjq( ".from-datepicker-input" ).val(selectedFromDate);
-              });
+            });
+            $wjq(".from-up-arrow").on("click",function(){
+                var date = new Date(selectedFromDate);
+                date.setDate(date.getDate() + 1);
+                selectedFromDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+                $wjq( ".from-datepicker-input" ).val(selectedFromDate);
+            });
 
-              $wjq(".from-down-arrow").on("click",function(){
-                  var date = new Date(selectedFromDate);
-                  date.setDate(date.getDate() - 1);
-                   selectedFromDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
-                   $wjq( ".from-datepicker-input" ).val(selectedFromDate);
-              });
-
+            $wjq(".from-down-arrow").on("click",function(){
+                var date = new Date(selectedFromDate);
+                date.setDate(date.getDate() - 1);
+                selectedFromDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+                $wjq( ".from-datepicker-input" ).val(selectedFromDate);
+            });
              // To date for new appointment
-             $wjq( ".to-datepicker-input" ).datepicker();
-             var selectedToDate; 
-             $wjq(".to-datepicker-input").on("change",function(){
+            $wjq( ".to-datepicker-input" ).datepicker();
+            var selectedToDate; 
+            $wjq(".to-datepicker-input").on("change",function(){
                 selectedToDate = $wjq(this).val();
-             });
+            });
              
-              $wjq(".to-up-arrow").on("click",function(){
-                  var date = new Date(selectedFromDate);
-                  date.setDate(date.getDate() + 1);
-                   selectedToDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
-                   $wjq( ".to-datepicker-input" ).val(selectedToDate);
-              });
-              $wjq(".to-down-arrow").on("click",function(){
-                  var date = new Date(selectedToDate);
-                  date.setDate(date.getDate() - 1);
-                   selectedToDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
-                   $wjq( ".to-datepicker-input" ).val(selectedToDate);
-              });
+            $wjq(".to-up-arrow").on("click",function(){
+                var date = new Date(selectedFromDate);
+                date.setDate(date.getDate() + 1);
+                selectedToDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+                $wjq( ".to-datepicker-input" ).val(selectedToDate);
+            });
+            $wjq(".to-down-arrow").on("click",function(){
+                var date = new Date(selectedToDate);
+                date.setDate(date.getDate() - 1);
+                selectedToDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+                $wjq( ".to-datepicker-input" ).val(selectedToDate);
+            });
 
-              $wjq("#save").click(function(){
+            $wjq("#save").click(function(){
                 alert("success");
                 var fromDate = $wjq("#fromDate").val();
                 var fromTime = $wjq("#fromTime").val();
@@ -425,33 +419,30 @@
                 var capacity = $wjq("#capacity").val();
                 var staff = $wjq("#staff").val();
                 var location = $wjq("#location").val();
-                var notes = $wjq("#notes").val();
-                
-              })
-                $wjq('.filter-header').click(function() { 
-                    var id = $wjq(this).parent().attr('id');
-                    let flag = $( "#"+id ).hasClass( "open" )
-                    if(flag){
-                        $wjq(this).parent().children('.option-header-container').remove();
-                        $wjq('#'+id).removeClass('open');
-                        $( "#"+id ).find('.filter-nav-icon').removeClass('open');
+                var notes = $wjq("#notes").val();   
+            });
+            $wjq('.filter-header').click(function() { 
+                var id = $wjq(this).parent().attr('id');
+                let flag = $( "#"+id ).hasClass( "open" )
+                if(flag){
+                    $wjq(this).parent().children('.option-header-container').remove();
+                    $wjq('#'+id).removeClass('open');
+                    $( "#"+id ).find('.filter-nav-icon').removeClass('open');
+                }
+                else{
+                    var indices = id.split('_');
+                    var index = parseInt(indices[1]);
+                    for(var i=0;i<filters[index].options.length;i++){
+                        $wjq('#'+id).append('<div class="option_'+i+' option-header-container">'+
+                                '<label class="cursor option-title">'+
+                                    '<input type="checkbox" name="checkbox" value="value">'+filters[index].options[i]+
+                                '</label>'+
+                        '</div>');
                     }
-                    else{
-                        var indices = id.split('_');
-                        var index = parseInt(indices[1]);
-                        for(var i=0;i<filters[index].options.length;i++){
-                            $wjq('#'+id).append('<div class="option_'+i+' option-header-container">'+
-                                
-                                    '<label class="cursor option-title">'+
-                                        '<input type="checkbox" name="checkbox" value="value">'+filters[index].options[i]+
-                                    '</label>'+
-                                
-                            '</div>');
-                        }
-                        $wjq('#'+id).addClass('open');
-                        $( "#"+id ).find('.filter-nav-icon').addClass('open');
-                    }
-                });    
+                    $wjq('#'+id).addClass('open');
+                    $( "#"+id ).find('.filter-nav-icon').addClass('open');
+                }
+            });    
             },100);
        });
     }
