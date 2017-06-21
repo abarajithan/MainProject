@@ -115,12 +115,10 @@
     };    
     filters.push(filterObj);
     function calendarFilter($wjq){
-        $wjq(".fc-agenda-divider.fc-widget-header").after("<div class='filter-section'></div>");
         buildFilterBody($wjq);
         var expanded = false;
         $wjq('.filter-label-outer').click(function(){
             $wjq('.filter-section').animate(expanded?{'marginLeft':'-225px'} : {marginLeft:'0px'},500);
-            
             expanded ? $wjq('.filter-slide-icon').removeClass('open') : $wjq('.filter-slide-icon').addClass('open');
             expanded = !expanded;
 
@@ -317,20 +315,47 @@
                
                 });
                 $wjq('.wkView').click(function(){
-                    calendar.fullCalendar('changeView','agendaWeek');
-                    calendarFilter($wjq);
+                    var filterElement = undefined;
+                    if($wjq('.filter-section').length){
+                        filterElement = $wjq('.filter-section');
+                        $wjq('.filter-section').remove();
+                    }
+                    if(calendar.fullCalendar('getView').name != 'agendaWeek'){
+                        calendar.fullCalendar('changeView','agendaWeek');
+                        if(filterElement != undefined){
+                            $wjq(".fc-agenda-divider.fc-widget-header:visible").after(filterElement);
+                        }
+                        else{
+                             $wjq(".fc-agenda-divider.fc-widget-header:visible").after("<div class='filter-section'></div>");
+                            calendarFilter($wjq);
+                        }
+                    }
                 });
                 $wjq('.dayView').click(function(){
-                    calendar.fullCalendar('changeView','resourceDay');
-                    setTimeout(function(){
-                        var currentCalendarDate = calendar.fullCalendar('getDate');
-                        $wjq('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
-                        var dayOfWeek = moment(currentCalendarDate).format('dddd');
-                        var dayofMonth = moment(currentCalendarDate).format('M/D');
-                        $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
-                        calendarFilter($wjq);
-                    },500); 
+                    var filterElement = undefined;
+                    if($wjq('.filter-section').length){
+                        filterElement = $wjq('.filter-section');
+                        $wjq('.filter-section').remove();
+                    }
+                    if(calendar.fullCalendar('getView').name != 'resourceDay'){
+                        calendar.fullCalendar('changeView','resourceDay');
+                        setTimeout(function(){
+                            var currentCalendarDate = calendar.fullCalendar('getDate');
+                            $wjq('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
+                            var dayOfWeek = moment(currentCalendarDate).format('dddd');
+                            var dayofMonth = moment(currentCalendarDate).format('M/D');
+                            $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
+                        },500); 
+                        if(filterElement != undefined){
+                            $wjq(".fc-agenda-divider.fc-widget-header:visible").after(filterElement);
+                        }
+                        else{
+                            $wjq(".fc-agenda-divider.fc-widget-header:visible").after("<div class='filter-section'></div>");
+                            calendarFilter($wjq);
+                        }
+                    }
                 });
+                $wjq(".fc-agenda-divider.fc-widget-header").after("<div class='filter-section'></div>");
                 calendarFilter($wjq);
                 $wjq('#datepicker').datepicker({
                     buttonImage: window.location.protocol +"//"+window.location.host+"/WidgetCalendar/images/calendar.png",
