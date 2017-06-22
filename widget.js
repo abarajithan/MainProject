@@ -116,7 +116,8 @@
     filters.push(filterObj);
     function calendarFilter($wjq){
         buildFilterBody($wjq);
-        var expanded = false;
+    }
+    function filterSlide($wjq,expanded){
         $wjq('.filter-label-outer').click(function(){
             $wjq('.filter-section').animate(expanded?{'marginLeft':'-225px'} : {marginLeft:'0px'},500);
             expanded ? $wjq('.filter-slide-icon').removeClass('open') : $wjq('.filter-slide-icon').addClass('open');
@@ -193,6 +194,7 @@
                     defaultView: 'resourceDay',
                     minTime:9,
                     maxTime:18,
+                    height:window.innerHeight - 50,
                     slotMinutes : 30,
                     selectable: true,
                     selectHelper: true,
@@ -312,32 +314,37 @@
                     var dayOfWeek = moment(currentCalendarDate).format('dddd');
                     var dayofMonth = moment(currentCalendarDate).format('M/D');
                     $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
-               
                 });
                 $wjq('.wkView').click(function(){
                     var filterElement = undefined;
-                    if($wjq('.filter-section').length){
-                        filterElement = $wjq('.filter-section');
-                        $wjq('.filter-section').remove();
-                    }
+                    $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').css('text-align','center');
                     if(calendar.fullCalendar('getView').name != 'agendaWeek'){
+                        var isFilterOpen = false;
+                        if($wjq('.filter-section').length){
+                            isFilterOpen = $wjq('.filter-section').css("marginLeft");
+                            filterElement = $wjq('.filter-section');
+                            $wjq('.filter-section').remove();
+                        }
                         calendar.fullCalendar('changeView','agendaWeek');
                         if(filterElement != undefined){
                             $wjq(".fc-agenda-divider.fc-widget-header:visible").after(filterElement);
                         }
                         else{
-                             $wjq(".fc-agenda-divider.fc-widget-header:visible").after("<div class='filter-section'></div>");
+                            $wjq(".fc-agenda-divider.fc-widget-header:visible").after("<div class='filter-section'></div>");
                             calendarFilter($wjq);
                         }
+                        filterSlide($wjq,isFilterOpen == '0px');
                     }
                 });
                 $wjq('.dayView').click(function(){
                     var filterElement = undefined;
-                    if($wjq('.filter-section').length){
-                        filterElement = $wjq('.filter-section');
-                        $wjq('.filter-section').remove();
-                    }
                     if(calendar.fullCalendar('getView').name != 'resourceDay'){
+                        var isFilterOpen = false;
+                        if($wjq('.filter-section').length){
+                            isFilterOpen = $wjq('.filter-section').css("marginLeft");
+                            filterElement = $wjq('.filter-section');
+                            $wjq('.filter-section').remove();
+                        }
                         calendar.fullCalendar('changeView','resourceDay');
                         setTimeout(function(){
                             var currentCalendarDate = calendar.fullCalendar('getDate');
@@ -353,10 +360,12 @@
                             $wjq(".fc-agenda-divider.fc-widget-header:visible").after("<div class='filter-section'></div>");
                             calendarFilter($wjq);
                         }
+                        filterSlide($wjq,isFilterOpen == '0px');
                     }
                 });
                 $wjq(".fc-agenda-divider.fc-widget-header").after("<div class='filter-section'></div>");
                 calendarFilter($wjq);
+                filterSlide($wjq,false);
                 $wjq('#datepicker').datepicker({
                     buttonImage: window.location.protocol +"//"+window.location.host+"/WidgetCalendar/images/calendar.png",
                     buttonImageOnly: true,
@@ -369,8 +378,7 @@
                        $wjq('.headerDate').text(date);
                        var dayOfWeek = moment(date).format('dddd');
                        var dayofMonth = moment(date).format('M/D');
-                       $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
-                      
+                       $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);  
                     }
                 });
                
