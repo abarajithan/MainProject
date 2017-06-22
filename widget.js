@@ -388,13 +388,13 @@
                     });
                     $wjq("#appointmentModal").dialog('option', 'title', 'Add New Appointment Slot');
                     setTimeout(function(){  
-                        $wjq( ".from-timepicker-input" ).on("click", function(){
+                        $wjq(".from-timepicker-input").on("click", function(){
                             $wjq( ".from-timepicker-input" ).timepicker();
                             $wjq( ".from-timepicker-input" ).after($wjq('.ui-timepicker-container'));
                             $wjq('.ui-timepicker-container').css('top',$wjq( ".from-timepicker-input" ).offset().top - 70 +'px');
                             $wjq('.ui-timepicker-container').css('left',$wjq( ".from-timepicker-input" ).offset().left -520 +'px');
                         });
-                        $wjq( ".to-timepicker-input" ).on("click", function(){
+                        $wjq(".to-timepicker-input").on("click", function(){
                             $wjq( ".to-timepicker-input" ).timepicker();
                             $wjq( ".to-timepicker-input" ).after($wjq('.ui-timepicker-container'));
                             $wjq('.ui-timepicker-container').css('top',$wjq(".to-timepicker-input").offset().top - 70 +'px');
@@ -466,15 +466,23 @@
                         var index = parseInt(indices[1]);
                         for(var i=0;i<filters[index].options.length;i++){
                             $wjq('#'+id).append('<div class="option_'+i+' option-header-container">'+
-                                    '<label class="cursor option-title">'+
-                                        '<input type="checkbox" name="checkbox" value="value">'+filters[index].options[i]+
-                                    '</label>'+
+                                '<label class="cursor option-title">'+
+                                    '<input type="checkbox" name="checkbox" value="value">'+filters[index].options[i]+
+                                '</label>'+
                             '</div>');
                         }
                         $wjq('#'+id).addClass('open');
                         $( "#"+id ).find('.filter-nav-icon').addClass('open');
                     }
-                });    
+                });   
+                var sofExpanded = false;
+                $wjq('.sof-pane').css('height',$wjq('#calendar').height() - 25 +"px"); 
+                $wjq('.sof-pane').css('overflow-y','auto'); 
+                $wjq('.sof-btn').click(function(){
+                    sofExpanded = !sofExpanded;
+                    sofExpanded ? $wjq('.sof-pane').addClass('open') : $wjq('.sof-pane').removeClass('open');
+                    $wjq('.sof-pane').animate(sofExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
+                }); 
             },100);
        });
     }
