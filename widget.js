@@ -147,7 +147,7 @@
 
     /******** Our main function ********/
     function main() { 
-        jQuery(document).ready(function($wjq) { 
+        jQuery(document).ready(function($wjq) {
             /******* Load External Libraries *******/
             loadLibraries($wjq);   
             //load the widget HTML into the div we get   
@@ -387,19 +387,39 @@
                         modal: true 
                     });
                     $wjq("#appointmentModal").dialog('option', 'title', 'Add New Appointment Slot');
-                    setTimeout(function(){  
-                        $wjq(".from-timepicker-input").on("click", function(){
-                            $wjq( ".from-timepicker-input" ).timepicker();
-                            $wjq( ".from-timepicker-input" ).after($wjq('.ui-timepicker-container'));
-                            $wjq('.ui-timepicker-container').css('top',$wjq( ".from-timepicker-input" ).offset().top - 70 +'px');
-                            $wjq('.ui-timepicker-container').css('left',$wjq( ".from-timepicker-input" ).offset().left -520 +'px');
-                        });
-                        $wjq(".to-timepicker-input").on("click", function(){
-                            $wjq( ".to-timepicker-input" ).timepicker();
-                            $wjq( ".to-timepicker-input" ).after($wjq('.ui-timepicker-container'));
-                            $wjq('.ui-timepicker-container').css('top',$wjq(".to-timepicker-input").offset().top - 70 +'px');
-                            $wjq('.ui-timepicker-container').css('left',$wjq(".to-timepicker-input").offset().left -520 +'px');
-                        });
+                    setTimeout(function(){                      
+                        var etime;                        
+                        $wjq( ".from-timepicker-input" ).timepicker({timeFormat: 'h:mm p',    
+                                interval: 30,                            
+                                minTime: '9',                            
+                                maxTime: '6:00pm',                            
+                                startTime: '9:00',                            
+                                dynamic: false,                            
+                                dropdown: true,                            
+                                scrollbar: true,                                                      
+                                change: function {                            
+                                    var stime = new Date;                            
+                                    stime.setMinutes(stime.getMinutes() + 30);                              
+                                    var hours = stime.getHours();                              
+                                    var minutes = stime.getMinutes();                              
+                                    var ampm = hours >= 12 ? 'PM' : 'AM';                              
+                                    hours = hours % 12;                              
+                                    hours = hours ? hours : 12; // the hour '0' should be '12'  
+                                    minutes = minutes < 10 ? '0'+minutes : minutes;                              
+                                    var etime = hours + ':' + minutes + ' ' + ampm;                                
+                                    $wjq(".to-timepicker-input").val(etime);                                                             
+                                    $wjq(".to-timepicker-input").timepicker('option',{'minTime': stime.getHours()});                            
+                                }  
+                                                  
+                        });                                   
+                        $wjq( ".to-timepicker-input" ).timepicker({timeFormat: 'h:mm p', 
+                            interval: 30,                            
+                            minTime: $(".to-timepicker-input").val().split(' ')[0]+':00', 
+                            maxTime: '6:00pm',                            
+                            dynamic: false,                            
+                            dropdown: true,                            
+                            scrollbar: true                       
+                        });                                   
                     },300);
                 });
                 // From date for new appointment
