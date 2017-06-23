@@ -147,7 +147,7 @@
 
     /******** Our main function ********/
     function main() { 
-        jQuery(document).ready(function($wjq) {
+        jQuery(document).ready(function($wjq) { 
             /******* Load External Libraries *******/
             loadLibraries($wjq);   
             //load the widget HTML into the div we get   
@@ -389,37 +389,39 @@
                     $wjq("#appointmentModal").dialog('option', 'title', 'Add New Appointment Slot');
                     setTimeout(function(){                      
                         var etime;                        
-                        $wjq( ".from-timepicker-input" ).timepicker({timeFormat: 'h:mm p',    
-                                interval: 30,                            
-                                minTime: '9',                            
-                                maxTime: '6:00pm',                            
-                                startTime: '9:00',                            
-                                dynamic: false,                            
-                                dropdown: true,                            
-                                scrollbar: true,                                                      
-                                change: function {                            
-                                    var stime = new Date;                            
-                                    stime.setMinutes(stime.getMinutes() + 30);                              
-                                    var hours = stime.getHours();                              
-                                    var minutes = stime.getMinutes();                              
-                                    var ampm = hours >= 12 ? 'PM' : 'AM';                              
-                                    hours = hours % 12;                              
-                                    hours = hours ? hours : 12; // the hour '0' should be '12'  
-                                    minutes = minutes < 10 ? '0'+minutes : minutes;                              
-                                    var etime = hours + ':' + minutes + ' ' + ampm;                                
-                                    $wjq(".to-timepicker-input").val(etime);                                                             
-                                    $wjq(".to-timepicker-input").timepicker('option',{'minTime': stime.getHours()});                            
-                                }  
-                                                  
-                        });                                   
-                        $wjq( ".to-timepicker-input" ).timepicker({timeFormat: 'h:mm p', 
-                            interval: 30,                            
-                            minTime: $(".to-timepicker-input").val().split(' ')[0]+':00', 
-                            maxTime: '6:00pm',                            
-                            dynamic: false,                            
-                            dropdown: true,                            
-                            scrollbar: true                       
-                        });                                   
+                        $wjq(".from-timepicker-input" ).timepicker({
+                                    timeFormat: 'h:mm p', 
+                                    interval: 30,                            
+                                    minTime: '9',                            
+                                    maxTime: '6:00pm',                            
+                                    startTime: '9:00',                            
+                                    dynamic: false,                            
+                                    dropdown: true,                            
+                                    scrollbar: true,       
+                                    change: function ()
+                                    {                            
+                                        var stime = new Date;                            
+                                        stime.setMinutes(stime.getMinutes() + 30);    
+                                        var hours = stime.getHours();       
+                                        var minutes = stime.getMinutes();  
+                                        var ampm = hours >= 12 ? 'PM' : 'AM';    
+                                        hours = hours % 12;            
+                                        hours = hours ? hours : 12; 
+                                        minutes = minutes < 10 ? '0'+minutes : minutes; 
+                                        var etime = hours + ':' + minutes + ' ' + ampm; 
+                                        $wjq(".to-timepicker-input").val(etime);  
+                                        $wjq(".to-timepicker-input").timepicker('option',{'minTime': stime.getHours()});
+                                    }                        
+                                });                                   
+                        $wjq( ".to-timepicker-input" ).timepicker({    
+                                    timeFormat: 'h:mm p',                            
+                                    interval: 30,                            
+                                    minTime: $(".to-timepicker-input").val().split(' ')[0]+':00', 
+                                    maxTime: '6:00pm',                            
+                                    dynamic: false,                            
+                                    dropdown: true,                            
+                                    scrollbar: true                        
+                                });                                   
                     },300);
                 });
                 // From date for new appointment
@@ -495,13 +497,32 @@
                         $( "#"+id ).find('.filter-nav-icon').addClass('open');
                     }
                 });   
+                //Student pane and TA pane Functionality
                 var sofExpanded = false;
+                var taExpanded = false;
                 $wjq('.sof-pane').css('height',$wjq('#calendar').height() - 25 +"px"); 
+                $wjq('.ta-pane').css('height',$wjq('#calendar').height() - 25 +"px"); 
                 $wjq('.sof-pane').css('overflow-y','auto'); 
+                $wjq('.ta-pane').css('overflow-y','auto'); 
                 $wjq('.sof-btn').click(function(){
+                    if(taExpanded){
+                        taExpanded = !taExpanded; // to change the slide
+                        taExpanded ? $wjq('.ta-pane').addClass('open') : $wjq('.ta-pane').removeClass('open');
+                        $wjq('.ta-pane').animate(taExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
+                    }
                     sofExpanded = !sofExpanded;
                     sofExpanded ? $wjq('.sof-pane').addClass('open') : $wjq('.sof-pane').removeClass('open');
                     $wjq('.sof-pane').animate(sofExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
+                });
+                $wjq('.ta-btn').click(function(){
+                    if(sofExpanded){
+                        sofExpanded = !sofExpanded;
+                        sofExpanded ? $wjq('.sof-pane').addClass('open') : $wjq('.sof-pane').removeClass('open');
+                        $wjq('.sof-pane').animate(sofExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
+                    }
+                    taExpanded = !taExpanded;
+                    taExpanded ? $wjq('.ta-pane').addClass('open') : $wjq('.ta-pane').removeClass('open');
+                    $wjq('.ta-pane').animate(taExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
                 }); 
             },100);
        });
