@@ -1,3 +1,7 @@
  $("#target" ).click(function() {
-  alert( "Handler for .click() called." );
+
 });
+
+setTimeout(function(){
+	wjQuery("#widget-calendar").sylvanCalendar();
+},100);
