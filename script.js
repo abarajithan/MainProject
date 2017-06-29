@@ -345,6 +345,130 @@ var student = [
     }
   ];
 
+var staff =   [
+
+    {
+      "@odata.etag": "W/\"1429007\"",
+      "_hub_staff_value@OData.Community.Display.V1.FormattedValue": "James",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_staff",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_staff",
+      "_hub_staff_value": "60339fb2-d940-e711-80f0-c4346bad526c",
+      "hub_staff_scheduleid": "94c89f23-2250-e711-80f1-c4346bacfbbc",
+      "hub_end_time@OData.Community.Display.V1.FormattedValue": "11:00 AM",
+      "hub_end_time": 660,
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "6/13/2017",
+      "hub_end_date": "2017-06-13",
+      "hub_start_time@OData.Community.Display.V1.FormattedValue": "10:00 AM",
+      "hub_start_time": 600,
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "6/13/2017",
+      "hub_start_date": "2017-06-13",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "6/13/2017",
+      "hub_date": "2017-06-13",
+      "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
+      "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc"
+    },
+    {
+      "@odata.etag": "W/\"1429025\"",
+      "_hub_staff_value@OData.Community.Display.V1.FormattedValue": "James",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_staff",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_staff",
+      "_hub_staff_value": "60339fb2-d940-e711-80f0-c4346bad526c",
+      "hub_staff_scheduleid": "710ba12f-2250-e711-80f1-c4346bacfbbc",
+      "hub_end_time@OData.Community.Display.V1.FormattedValue": "4:00 PM",
+      "hub_end_time": 960,
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "6/14/2017",
+      "hub_end_date": "2017-06-14",
+      "hub_start_time@OData.Community.Display.V1.FormattedValue": "3:00 PM",
+      "hub_start_time": 900,
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "6/14/2017",
+      "hub_start_date": "2017-06-14",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "6/14/2017",
+      "hub_date": "2017-06-14",
+      "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
+      "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc"
+    },
+    {
+      "@odata.etag": "W/\"1429692\"",
+      "_hub_staff_value@OData.Community.Display.V1.FormattedValue": "James",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_staff",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_staff",
+      "_hub_staff_value": "60339fb2-d940-e711-80f0-c4346bad526c",
+      "hub_staff_scheduleid": "959a0a3a-2250-e711-80f1-c4346bacfbbc",
+      "hub_end_time@OData.Community.Display.V1.FormattedValue": "1:30 PM",
+      "hub_end_time": 810,
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "6/18/2017",
+      "hub_end_date": "2017-06-18",
+      "hub_start_time@OData.Community.Display.V1.FormattedValue": "12:30 PM",
+      "hub_start_time": 750,
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "6/18/2017",
+      "hub_start_date": "2017-06-18",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "6/18/2017",
+      "hub_date": "2017-06-18",
+      "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
+      "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc"
+    },
+    {
+      "@odata.etag": "W/\"1429027\"",
+      "_hub_staff_value@OData.Community.Display.V1.FormattedValue": "James",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_staff",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_staff",
+      "_hub_staff_value": "60339fb2-d940-e711-80f0-c4346bad526c",
+      "hub_staff_scheduleid": "4b1a3f42-2250-e711-80f1-c4346bacfbbc",
+      "hub_end_time@OData.Community.Display.V1.FormattedValue": "4:00 PM",
+      "hub_end_time": 960,
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "6/16/2017",
+      "hub_end_date": "2017-06-16",
+      "hub_start_time@OData.Community.Display.V1.FormattedValue": "3:00 PM",
+      "hub_start_time": 900,
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "6/16/2017",
+      "hub_start_date": "2017-06-16",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "6/16/2017",
+      "hub_date": "2017-06-16",
+      "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
+      "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc"
+    },
+    {
+      "@odata.etag": "W/\"1429028\"",
+      "_hub_staff_value@OData.Community.Display.V1.FormattedValue": "James",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_staff",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_staff",
+      "_hub_staff_value": "60339fb2-d940-e711-80f0-c4346bad526c",
+      "hub_staff_scheduleid": "cf904c4b-2250-e711-80f1-c4346bacfbbc",
+      "hub_end_time@OData.Community.Display.V1.FormattedValue": "4:00 PM",
+      "hub_end_time": 960,
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "6/17/2017",
+      "hub_end_date": "2017-06-17",
+      "hub_start_time@OData.Community.Display.V1.FormattedValue": "3:00 PM",
+      "hub_start_time": 900,
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "6/17/2017",
+      "hub_start_date": "2017-06-17",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "6/17/2017",
+      "hub_date": "2017-06-17",
+      "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
+      "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc"
+    },
+    {
+      "@odata.etag": "W/\"1429029\"",
+      "_hub_staff_value@OData.Community.Display.V1.FormattedValue": "James",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_staff",
+      "_hub_staff_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_staff",
+      "_hub_staff_value": "60339fb2-d940-e711-80f0-c4346bad526c",
+      "hub_staff_scheduleid": "3aa09856-2250-e711-80f1-c4346bacfbbc",
+      "hub_end_time@OData.Community.Display.V1.FormattedValue": "11:00 AM",
+      "hub_end_time": 660,
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "6/18/2017",
+      "hub_end_date": "2017-06-18",
+      "hub_start_time@OData.Community.Display.V1.FormattedValue": "10:00 AM",
+      "hub_start_time": 600,
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "6/18/2017",
+      "hub_start_date": "2017-06-18",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "6/18/2017",
+      "hub_date": "2017-06-18",
+      "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
+      "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc"
+    }
+  ];
+
 
 var filterObject = {
 	location: centerAvailable,
@@ -355,17 +479,39 @@ var filterObject = {
 	subject: subject
 }
 
+// setTimeout(function(){
+// 	wjQuery("#widget-calendar").sylvanCalendar();
+// 	wjQuery("#widget-calendar").sylvanCalendar('getFilterObject', filterObject);
+// },300);
+
+// var options = {
+// 	location : locations
+// };
+
+// setTimeout(function(){
+// 	wjQuery("#widget-calendar").sylvanCalendar();
+// },300);
+
+// setTimeout(function(){
+//     wjQuery("#widget-calendar").sylvanCalendar('populateLocation',locations); 
+// },400);
+
+// function fetchResources(resourceId){
+//   wjQuery("#widget-calendar").sylvanCalendar('populateResource',resources);
+// }
+
 setTimeout(function(){
-	wjQuery("#widget-calendar").sylvanCalendar();
-	wjQuery("#widget-calendar").sylvanCalendar('getFilterObject', filterObject);
+	var sylvanCalendar = new SylvanCalendar();
+	sylvanCalendar.init("widget-calendar");
+	sylvanCalendar.generateFilterObject(filterObject);
+	setTimeout(function(){
+		var resourceId = sylvanCalendar.populateLocation(locations);
+		function fetchResources(resourceId){
+			sylvanCalendar.populateResource(resources);
+		}
+		fetchResources(resourceId);
+	},100);
 },300);
-var options = {
-  location : locations
-};
-setTimeout(function(){
-  wjQuery("#widget-calendar").sylvanCalendar('populateLocation',locations); 
-},400);
-function fetchResources(resourceId){
-  wjQuery("#widget-calendar").sylvanCalendar('populateResource',resources);
-}
+
+
 
