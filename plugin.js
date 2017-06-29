@@ -4,12 +4,17 @@
     var defaults = {
         // ...
     };
+    
+    
+    var calendar = undefined;
 
     // Methods
     var methods = {
         // (Note that `initialize` isn't on this list)
-        getData:    getData,
-        setData:    setData
+        setData:    setData,
+        populateLocation : populateLocation,
+        getCurrentLocationId : getCurrentLocationId,
+        populateResource : populateResource
     };
 
     // Utils
@@ -55,23 +60,26 @@
     function initialize(args) {
         // Get the options
         var options = $wjq.extend({}, defaults, args[0]);
-
         // Loop through, initializing the elements
         this.each(function(i,element) {
-            main(element);
+            $wjq(element).load(window.location.protocol +"//"+window.location.host+"/WidgetCalendar/index.html");    
+            main();
             // ...
             // (if appropriate here, you might detect whether you're being re-initialized
             // for the same element)
         });
+        setTimeout(function(){
+            if(options != undefined){
+                options['location'] != undefined ? populateLocation(options['location']):'';
+            }
+        },100);
 
         // Enable chaining
         return this;
     }
 
     // Get data
-    function getData(args) {
-        // "Get" operations only apply to the first element
-        // Return the data; normally `args` wouldn't be used
+    function getCurrentLocationId(args) {
         return this.first().data("sylvanCalendar");
     }
 
@@ -81,45 +89,55 @@
         return this;
     }
 
-    function main(element){
-        loadLibraries($wjq); 
-        $wjq(element).load(window.location.protocol +"//"+window.location.host+"/WidgetCalendar/index.html");    
+    function populateLocation(args){
+        var locationData = [];
+        args[0][0] == undefined ? locationData = args:locationData = args[0];
+        var locationList = [];
+        for(var i=0;i<locationData.length;i++){
+            if(!i)
+            {
+                $wjq(".loc-dropdown .btn:first-child").text(locationData[i].hub_centername);
+                $wjq(".loc-dropdown .btn:first-child").val(locationData[i].hub_centerid);
+            }
+            locationList.push('<li><a tabindex="-1" value-id='+locationData[i].hub_centerid+' href="javascript:void(0)">'+locationData[i].hub_centername+'</a></li>');
+        }
+        $wjq(".loc-dropdown ul").html(locationList);
+        $wjq(".loc-dropdown .dropdown-menu").on('click', 'li a', function(){
+            if($wjq(".loc-dropdown .btn:first-child").val() != $wjq(this).attr('value-id')){
+                $wjq(".loc-dropdown .btn:first-child").text($wjq(this).text());
+                $wjq(".loc-dropdown .btn:first-child").val($wjq(this).attr('value-id'));
+                resourceList = [];
+                return fetchResources($wjq(this).attr('value-id'));
+            }
+        });
+        return fetchResources(locationData[0].hub_centerid);
+    }
+
+    var resourceList = [];
+    function populateResource(args){
+        var resourceData = [];
+        args[0][0] == undefined ? resourceData = args:resourceData = args[0];
+        for(var i=0;i<resourceData.length;i++){
+            resourceList.push({
+                name: i+1,
+                id: resourceData[i].hub_center_resourcesid
+            });
+        }
+        calendar == undefined ? loadCalendar(): calendar.fullCalendar('resources',resourceList);
+    }
+
+    function main(){
+        loadLibraries($wjq);      
+    }
+
+    function loadCalendar(){
         setTimeout(function(){
         var date = new Date();
         var d = date.getDate();
         var m = date.getMonth();
         var y = date.getFullYear();
         
-        var resourceList = [
-                {
-                    name: '1',
-                    id: 'resource1'
-                },
-                {
-                    name: '2',
-                    id: 'resource2'
-                },
-                {
-                    name: '3',
-                    id: 'resource3'
-                },
-                {
-                    name: '4',
-                    id: 'resource4'
-                },
-                {
-                    name: '5',
-                    id: 'resource5'
-                },
-                {
-                    name: '6',
-                    id: 'resource6'
-                },
-                {
-                    name: '7',
-                    id: 'resource7'
-                }
-            ];
+       
         var calendarOptions = {
             header: false,
             defaultView: 'resourceDay',
@@ -159,7 +177,7 @@
                     title: 'All Day Event 1',
                     start: new Date(y, m, d - 1),
                     end: new Date(y, m, d + 1),
-                    resourceId: 'resource1',
+                    resourceId: '0517a2c8-1b50-e711-80f1-c4346bacfbbc',
                     backgroundColor: '#27A0C9'
                 },
                 {
@@ -167,7 +185,7 @@
                     start: new Date(y, m, d, 11, 30),
                     end: new Date(y, m, d, 13, 00),
                     allDay: false,
-                    resourceId: 'resource1',
+                    resourceId: '0517a2c8-1b50-e711-80f1-c4346bacfbbc',
                     backgroundColor: '#27A0C9'
                 },
                 {
@@ -175,14 +193,14 @@
                     start: new Date(y, m, d + 1, 14, 00),
                     end: new Date(y, m, d + 1, 15, 00),
                     allDay: false,
-                    resourceId: 'resource1',
+                    resourceId: '9665d732-7f56-e711-80f1-c4346bad526c',
                     backgroundColor: '#27A0C9'
                 },
                 {
                     title: 'All Day Event 2',
                     start: new Date(y, m, d - 2),
                     end: new Date(y, m, d - 1),
-                    resourceId: 'resource2',
+                    resourceId: '9665d732-7f56-e711-80f1-c4346bad526c',
                     backgroundColor: '#3F51B5'
                 },
                 {
@@ -190,13 +208,13 @@
                     start: new Date(y, m, d, 12, 0),
                     end: new Date(y, m, d, 14, 0),
                     allDay: false,
-                    resourceId: 'resource2',
+                    resourceId: 'e48a5ea8-ad3b-e711-80ef-c4346badc680',
                     backgroundColor: '#3F51B5'                        
                 },
                 {
                     title: 'All Day Event 3',
                     start: new Date(y, m, d),
-                    resourceId: 'resource4'
+                    resourceId: 'e48a5ea8-ad3b-e711-80ef-c4346badc680'
                 },
                 {
                     title: 'Click for Google',
@@ -204,12 +222,12 @@
                     end: new Date(y, m, d, 16, 30),
                     allDay: false,
                     url: 'http://google.com/',
-                    resourceId: 'resource3'
+                    resourceId: '9665d732-7f56-e711-80f1-c4346bad526c'
                 }
             ]
         };  
         
-        var calendar = $wjq('#calendar').fullCalendar(calendarOptions);
+        calendar = $wjq('#calendar').fullCalendar(calendarOptions);
         var currentCalendarDate = calendar.fullCalendar('getDate');
         $wjq('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
 
