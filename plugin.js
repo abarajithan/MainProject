@@ -11,12 +11,10 @@
     // Methods
     var methods = {
         // (Note that `initialize` isn't on this list)
-        getData:      getData,
         setData:    setData,
         populateLocation : populateLocation,
         getCurrentLocationId : getCurrentLocationId,
         populateResource : populateResource,
-        setLocations: setLocations,
         getFilterObject: gererateFilterObject
         
 
@@ -612,13 +610,6 @@
             });
         });
         console.log(filters);
-    }
-
-    function setLocations(args){
-        // console.log(args);
-        // filters.push("Locations" : args);
-        // args[0][0] == undefined ? filters["location"] = args : filters["location"] = args[0];
-        return "Locations loaded successFully";
     }
     
     function calendarFilter($wjq){

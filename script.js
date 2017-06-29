@@ -357,8 +357,6 @@ var filterObject = {
 
 setTimeout(function(){
 	wjQuery("#widget-calendar").sylvanCalendar();
-	wjQuery("#widget-calendar").sylvanCalendar('setLocations', centerAvailable);
-	wjQuery("#widget-calendar").sylvanCalendar('setLocations', centerAvailable);
 	wjQuery("#widget-calendar").sylvanCalendar('getFilterObject', filterObject);
 },300);
  var options = {
@@ -367,10 +365,10 @@ setTimeout(function(){
 
 setTimeout(function(){
 	wjQuery("#widget-calendar").sylvanCalendar();
-},200);
+},300);
 setTimeout(function(){
     wjQuery("#widget-calendar").sylvanCalendar('populateLocation',locations); 
-},300);
+},400);
 function fetchResources(resourceId){
   wjQuery("#widget-calendar").sylvanCalendar('populateResource',resources);
 }
