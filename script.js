@@ -359,15 +359,11 @@ setTimeout(function(){
 	wjQuery("#widget-calendar").sylvanCalendar();
 	wjQuery("#widget-calendar").sylvanCalendar('getFilterObject', filterObject);
 },300);
- var options = {
-    location : locations
-  };
-
+var options = {
+  location : locations
+};
 setTimeout(function(){
-	wjQuery("#widget-calendar").sylvanCalendar();
-},300);
-setTimeout(function(){
-    wjQuery("#widget-calendar").sylvanCalendar('populateLocation',locations); 
+  wjQuery("#widget-calendar").sylvanCalendar('populateLocation',locations); 
 },400);
 function fetchResources(resourceId){
   wjQuery("#widget-calendar").sylvanCalendar('populateResource',resources);
