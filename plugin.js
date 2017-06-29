@@ -268,25 +268,25 @@ function SylvanCalendar(){
             console.log("event list");
         }
 
-        wjQuery('.prevBtn').click(function(){
+        this.prev = function(){
             this.calendar.fullCalendar('prev');
             var currentCalendarDate = this.calendar.fullCalendar('getDate');
             wjQuery('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
             var dayOfWeek = moment(currentCalendarDate).format('dddd');
             var dayofMonth = moment(currentCalendarDate).format('M/D');
             wjQuery('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
-        });
+        }
 
-        wjQuery('.nextBtn').click(function(){
+        this.next = function(){
             this.calendar.fullCalendar('next');
             var currentCalendarDate = this.calendar.fullCalendar('getDate');
             wjQuery('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
             var dayOfWeek = moment(currentCalendarDate).format('dddd');
             var dayofMonth = moment(currentCalendarDate).format('M/D');
             wjQuery('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
-        });
+        }
 
-        wjQuery('.wkView').click(function(){
+        this.weekView = function(){
             var filterElement = undefined;
             wjQuery('thead .fc-agenda-axis.fc-widget-header.fc-first').css('text-align','center');
             if(this.calendar.fullCalendar('getView').name != 'agendaWeek'){
@@ -306,9 +306,9 @@ function SylvanCalendar(){
                 }
                 this.filterSlide(wjQuery,isFilterOpen == '0px');
             }
-        });
+        }
 
-        wjQuery('.dayView').click(function(){
+        this.dayView = function(){
             var filterElement = undefined;
             if(this.calendar.fullCalendar('getView').name != 'resourceDay'){
                 var isFilterOpen = false;
@@ -334,7 +334,7 @@ function SylvanCalendar(){
                 }
                 this.filterSlide(wjQuery,isFilterOpen == '0px');
             }
-        });
+        }
 
         wjQuery(".fc-agenda-divider.fc-widget-header").after("<div class='filter-section'></div>");
         this.calendarFilter();
@@ -355,7 +355,7 @@ function SylvanCalendar(){
             }
         });
                
-        wjQuery('#addAppointment').on('click', function() {
+        this.addAppointment = function(){
             wjQuery("#appointmentModal").dialog({
                 modal: true 
             });
@@ -396,7 +396,7 @@ function SylvanCalendar(){
                             scrollbar: true                        
                         });                                   
             },300);
-        });
+        }
 
         // From date for new appointment
         wjQuery( ".from-datepicker-input" ).datepicker();
@@ -490,7 +490,8 @@ function SylvanCalendar(){
         wjQuery('.ta-pane').css('height',wjQuery('#calendar').height() - 25 +"px"); 
         wjQuery('.sof-pane').css('overflow-y','auto'); 
         wjQuery('.ta-pane').css('overflow-y','auto'); 
-        wjQuery('.sof-btn').click(function(){
+        
+        this.saPane = function(){
             if(taExpanded){
                 taExpanded = !taExpanded; // to change the slide
                 taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');
@@ -499,8 +500,8 @@ function SylvanCalendar(){
             sofExpanded = !sofExpanded;
             sofExpanded ? wjQuery('.sof-pane').addClass('open') : wjQuery('.sof-pane').removeClass('open');
             wjQuery('.sof-pane').animate(sofExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
-        });
-        wjQuery('.ta-btn').click(function(){
+        }
+        this.taPane = function(){
             if(sofExpanded){
                 sofExpanded = !sofExpanded;
                 sofExpanded ? wjQuery('.sof-pane').addClass('open') : wjQuery('.sof-pane').removeClass('open');
@@ -509,7 +510,7 @@ function SylvanCalendar(){
             taExpanded = !taExpanded;
             taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');
             wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
-        });
+        }
     
     }
 

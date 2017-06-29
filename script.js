@@ -479,27 +479,6 @@ var filterObject = {
 	subject: subject
 }
 
-// setTimeout(function(){
-// 	wjQuery("#widget-calendar").sylvanCalendar();
-// 	wjQuery("#widget-calendar").sylvanCalendar('getFilterObject', filterObject);
-// },300);
-
-// var options = {
-// 	location : locations
-// };
-
-// setTimeout(function(){
-// 	wjQuery("#widget-calendar").sylvanCalendar();
-// },300);
-
-// setTimeout(function(){
-//     wjQuery("#widget-calendar").sylvanCalendar('populateLocation',locations); 
-// },400);
-
-// function fetchResources(resourceId){
-//   wjQuery("#widget-calendar").sylvanCalendar('populateResource',resources);
-// }
-
 setTimeout(function(){
 	var sylvanCalendar = new SylvanCalendar();
 	sylvanCalendar.init("widget-calendar");
@@ -510,7 +489,29 @@ setTimeout(function(){
 			sylvanCalendar.populateResource(resources);
 		}
 		fetchResources(resourceId);
-	},100);
+    wjQuery('.prevBtn').bind('click',function(){
+      sylvanCalendar.prev();
+    });
+    wjQuery('.nextBtn').bind('click',function(){
+      sylvanCalendar.next();
+    });
+    wjQuery('.wkView').click(function(){
+      sylvanCalendar.weekView();
+    });
+    wjQuery('.dayView').click(function(){
+      sylvanCalendar.dayView();
+    });
+    wjQuery('#addAppointment').on('click', function() {
+      sylvanCalendar.addAppointment();
+    });
+    wjQuery('.sof-btn').click(function(){
+      sylvanCalendar.saPane();
+    });
+    wjQuery('.ta-btn').click(function(){
+      sylvanCalendar.taPane();
+    });
+
+	},200);
 },300);
 
 
