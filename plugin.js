@@ -11,10 +11,15 @@
     // Methods
     var methods = {
         // (Note that `initialize` isn't on this list)
+        getData:      getData,
         setData:    setData,
         populateLocation : populateLocation,
         getCurrentLocationId : getCurrentLocationId,
-        populateResource : populateResource
+        populateResource : populateResource,
+        setLocations: setLocations,
+        getFilterObject: gererateFilterObject
+        
+
     };
 
     // Utils
@@ -36,7 +41,6 @@
                 // Initializing
                 rv = initialize.call(this, args);
                 break;
-
             case "string":
                 // Method, do we know it?
                 method = methods[arg];
@@ -48,11 +52,9 @@
                 // Do it, return whatever it returns
                 rv = method.call(this, args);
                 break;
-
             default:
                 throw new Error("sylvanCalendar: Expected string or object as first argument if argument given.");
         }
-
         return rv;
     }
 
@@ -143,6 +145,7 @@
             defaultView: 'resourceDay',
             minTime:9,
             maxTime:18,
+            handleWindowResize:true,
             height:window.innerHeight - 50,
             slotMinutes : 30,
             selectable: true,
@@ -230,7 +233,6 @@
         calendar = $wjq('#calendar').fullCalendar(calendarOptions);
         var currentCalendarDate = calendar.fullCalendar('getDate');
         $wjq('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
-
         if($wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').length){
             var dayOfWeek = moment(currentCalendarDate).format('dddd');
             var dayofMonth = moment(currentCalendarDate).format('M/D');
@@ -254,8 +256,8 @@
             var dayOfWeek = moment(currentCalendarDate).format('dddd');
             var dayofMonth = moment(currentCalendarDate).format('M/D');
             $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
-       
         });
+
         $wjq('.nextBtn').click(function(){
             calendar.fullCalendar('next');
             var currentCalendarDate = calendar.fullCalendar('getDate');
@@ -264,6 +266,7 @@
             var dayofMonth = moment(currentCalendarDate).format('M/D');
             $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
         });
+
         $wjq('.wkView').click(function(){
             var filterElement = undefined;
             $wjq('thead .fc-agenda-axis.fc-widget-header.fc-first').css('text-align','center');
@@ -285,6 +288,7 @@
                 filterSlide($wjq,isFilterOpen == '0px');
             }
         });
+
         $wjq('.dayView').click(function(){
             var filterElement = undefined;
             if(calendar.fullCalendar('getView').name != 'resourceDay'){
@@ -312,6 +316,7 @@
                 filterSlide($wjq,isFilterOpen == '0px');
             }
         });
+
         $wjq(".fc-agenda-divider.fc-widget-header").after("<div class='filter-section'></div>");
         calendarFilter($wjq);
         filterSlide($wjq,false);
@@ -373,12 +378,14 @@
                         });                                   
             },300);
         });
+
         // From date for new appointment
         $wjq( ".from-datepicker-input" ).datepicker();
         var selectedFromDate; 
         $wjq(".from-datepicker-input").on("change",function(){
             selectedFromDate = $wjq(this).val();
         });
+
         $wjq(".from-up-arrow").on("click",function(){
             var date = new Date(selectedFromDate);
             date.setDate(date.getDate() + 1);
@@ -392,6 +399,7 @@
             selectedFromDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
             $wjq( ".from-datepicker-input" ).val(selectedFromDate);
         });
+
          // To date for new appointment
         $wjq( ".to-datepicker-input" ).datepicker();
         var selectedToDate; 
@@ -405,6 +413,7 @@
             selectedToDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
             $wjq( ".to-datepicker-input" ).val(selectedToDate);
         });
+
         $wjq(".to-down-arrow").on("click",function(){
             var date = new Date(selectedToDate);
             date.setDate(date.getDate() - 1);
@@ -426,7 +435,7 @@
         });
         $wjq('.filter-header').click(function() { 
             var id = $wjq(this).parent().attr('id');
-            let flag = $( "#"+id ).hasClass( "open" )
+            let flag = $( "#"+id ).hasClass( "open" );
             if(flag){
                 $wjq(this).parent().children('.option-header-container').remove();
                 $wjq('#'+id).removeClass('open');
@@ -434,13 +443,22 @@
             }
             else{
                 var indices = id.split('_');
-                var index = parseInt(indices[1]);
-                for(var i=0;i<filters[index].options.length;i++){
-                    $wjq('#'+id).append('<div class="option_'+i+' option-header-container">'+
+                var index = indices[1];
+                for(var i=0;i<filters[index].length;i++){
+                    if (filters[index][i].radio) {
+                        $wjq('#'+id).append('<div class="option_'+filters[index][i].id+' option-header-container">'+
                         '<label class="cursor option-title">'+
-                            '<input type="checkbox" name="checkbox" value="value">'+filters[index].options[i]+
+                            '<input type="radio" name="checkbox" value="value">'+filters[index][i].name+
                         '</label>'+
                     '</div>');
+                    }else{
+                        $wjq('#'+id).append('<div class="option_'+filters[index][i].id+' option-header-container">'+
+                        '<label class="cursor option-title">'+
+                            '<input type="checkbox" name="checkbox" value="value">'+filters[index][i].name+
+                        '</label>'+
+                    '</div>');
+                    }
+                    
                 }
                 $wjq('#'+id).addClass('open');
                 $( "#"+id ).find('.filter-nav-icon').addClass('open');
@@ -542,29 +560,79 @@
         });     
         css_link.appendTo('head');    
     }
+
+
     /******** Create Filters ***********/
-    var filters = [];
-    var filterObj = {
-        header : 'Location',
-        options : ['Satelite','Gotham City','Tales']
-    };    
-    filters.push(filterObj);
-    filterObj = {
-        header : 'Sample',
-        options : ['Option 1','Option 2','Option 3','Option 4']
-    };    
-    filters.push(filterObj);
+    var filters = Object();
+
+
+
+    convertedFilterObj = new Object();
+
+    function gererateFilterObject(args){
+        args[0] == undefined ? filtersObj = args : filtersObj = args[0];
+        // console.log(filtersObj);
+        $wjq.each(filtersObj, function(key, value) {
+            filters[key] = [];
+            // console.log(key);
+            $wjq.each(value, function(ke, val) {
+                if (key == 'location') {
+                    filters[key].push( {id: val.hub_centerid, name: val.hub_centername, radio: true} );
+                    // console.log({id: val.hub_centerid, name: val.hub_centername});
+                }else if(key == 'deliveryType'){
+                    filters[key].push( {id: val.hub_deliverytypeid, name: val.hub_name, radio: false} );
+                    // console.log({id: val.hub_deliverytypeid, name: val.hub_name});
+                }else if(key == "time"){
+                    filters[key].push( {id: val.id, name: val.name, radio: false});
+                    // console.log({id: val.id, name: val.name});
+                }else if(key == "grade"){
+                    // console.log(val);
+                    $wjq.each(val, function(name, id){
+                        // console.log(name);
+                        filters[key].push( {id: id, name: name, radio: false});
+                    });
+                }else if(key == "subject"){
+                    // console.log(val);
+                    $wjq.each(val, function(name, id){
+                        // console.log(name);
+                        filters[key].push( {id: id, name: name, radio: false});
+                    });
+                }else if(key == "student"){
+                    // console.log(val);
+                    filters[key].push({id: val._hub_student_value, 
+                                        name: val['_hub_student_value@OData.Community.Display.V1.FormattedValue'], 
+                                        startTime: val['hub_start_time@OData.Community.Display.V1.FormattedValue'],
+                                        endTime: val['hub_end_time@OData.Community.Display.V1.FormattedValue'],
+                                        sessionDate:val['hub_session_date@OData.Community.Display.V1.FormattedValue'],
+                                        // resourceValue:val[''],
+                                        radio: false
+                                    });
+                }
+
+            });
+        });
+        console.log(filters);
+    }
+
+    function setLocations(args){
+        // console.log(args);
+        // filters.push("Locations" : args);
+        // args[0][0] == undefined ? filters["location"] = args : filters["location"] = args[0];
+        return "Locations loaded successFully";
+    }
+    
     function calendarFilter($wjq){
         buildFilterBody($wjq);
     }
+
     function filterSlide($wjq,expanded){
         $wjq('.filter-label-outer').click(function(){
-            $wjq('.filter-section').animate(expanded?{'marginLeft':'-225px'} : {marginLeft:'0px'},500);
+            $wjq('.filter-section').animate(expanded?{'marginLeft':'-275px'} : {marginLeft:'0px'},500);
             expanded ? $wjq('.filter-slide-icon').removeClass('open') : $wjq('.filter-slide-icon').addClass('open');
             expanded = !expanded;
-
         });
     }
+
     function buildFilterBody($wjq){
         $wjq('.filter-section').html('<div class="filter-container"></div>'+
             '<div class="filter-label-outer">'+
@@ -572,19 +640,21 @@
                 '<div class="filter-label">FILTERS'+ 
                 '</div>'+
             '</div>');
-        for(var i=0;i<filters.length;i++){
+        // console.log(filters);
+        $wjq.each(filters, function(key, value){
+            // console.log(key);
             $wjq('.filter-container').append(
-            '<div id="filter_'+i+'" class="filter-header-container">'+
-                '<div class="filter-header cursor">' +
-                    '<div class="filter-title">'+filters[i].header+'</div>' +
-                    '<span class="filter-nav-icon"></span>' +
-                '</div>' +
-            '</div>');
-        }
+                '<div id="filter_'+key+'" class="filter-header-container">'+
+                    '<div class="filter-header cursor">' +
+                        '<div class="filter-title">'+key+'</div>' +
+                        '<span class="filter-nav-icon"></span>' +
+                    '</div>' +
+                '</div>'
+            );  
+        });
         $wjq('.filter-section').css('height',$wjq('.filter-section').next().height() - 2 +"px");  
         $wjq('.filter-container').css({'height':$wjq('.filter-section').next().height() - 2 +"px","overflow-y":"auto"});
     } 
-
 
 
 })(wjQuery);
