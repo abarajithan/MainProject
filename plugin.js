@@ -144,7 +144,7 @@
             minTime:9,
             maxTime:18,
             handleWindowResize:true,
-            height:window.innerHeight - 50,
+            height:window.innerHeight - 60,
             slotMinutes : 30,
             selectable: true,
             selectHelper: true,
