@@ -149,6 +149,9 @@ function SylvanCalendar(){
 
     this.loadCalendar = function(){
 
+        // assign filter object to local scope filter to avoid this conflict
+        var filters = this.filters;
+
         var date = new Date();
         var d = date.getDate();
         var m = date.getMonth();
@@ -463,17 +466,17 @@ function SylvanCalendar(){
             else{
                 var indices = id.split('_');
                 var index = indices[1];
-                for(var i=0;i<this.filters[index].length;i++){
-                    if (this.filters[index][i].radio) {
-                        wjQuery('#'+id).append('<div class="option_'+this.filters[index][i].id+' option-header-container">'+
+                for(var i=0;i<filters[index].length;i++){
+                    if (filters[index][i].radio) {
+                        wjQuery('#'+id).append('<div class="option_'+filters[index][i].id+' option-header-container">'+
                         '<label class="cursor option-title">'+
-                            '<input type="radio" name="checkbox" value="value">'+this.filters[index][i].name+
+                            '<input type="radio" name="checkbox" value="value">'+filters[index][i].name+
                         '</label>'+
                     '</div>');
                     }else{
-                        wjQuery('#'+id).append('<div class="option_'+this.filters[index][i].id+' option-header-container">'+
+                        wjQuery('#'+id).append('<div class="option_'+filters[index][i].id+' option-header-container">'+
                         '<label class="cursor option-title">'+
-                            '<input type="checkbox" name="checkbox" value="value">'+this.filters[index][i].name+
+                            '<input type="checkbox" name="checkbox" value="value">'+filters[index][i].name+
                         '</label>'+
                     '</div>');
                     }
