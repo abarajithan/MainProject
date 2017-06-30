@@ -1,7 +1,8 @@
 function SylvanCalendar(){
     this.resourceList = [];
     this.calendar = undefined;
-    this.filters = Object();
+    this.filters = new Object();
+    this.eventList = [];
 
     this.init = function(element){
         wjQuery('#'+element).load(window.location.protocol +"//"+window.location.host+"/WidgetCalendar/index.html");    
@@ -190,6 +191,7 @@ function SylvanCalendar(){
         var filters = this.filters;
 
         var date = new Date();
+        
         var d = date.getDate();
         var m = date.getMonth();
         var y = date.getFullYear();
@@ -234,59 +236,7 @@ function SylvanCalendar(){
             },
             editable: true,
             resources: this.resourceList,
-            events: [
-                {
-                    title: 'All Day Event 1',
-                    start: new Date(y, m, d - 1),
-                    end: new Date(y, m, d + 1),
-                    resourceId: '0517a2c8-1b50-e711-80f1-c4346bacfbbc',
-                    backgroundColor: '#27A0C9'
-                },
-                {
-                    title: 'Short Event 1',
-                    start: new Date(y, m, d, 11, 30),
-                    end: new Date(y, m, d, 13, 00),
-                    allDay: false,
-                    resourceId: '0517a2c8-1b50-e711-80f1-c4346bacfbbc',
-                    backgroundColor: '#27A0C9'
-                },
-                {
-                    title: 'Short Event 2',
-                    start: new Date(y, m, d + 1, 14, 00),
-                    end: new Date(y, m, d + 1, 15, 00),
-                    allDay: false,
-                    resourceId: '9665d732-7f56-e711-80f1-c4346bad526c',
-                    backgroundColor: '#27A0C9'
-                },
-                {
-                    title: 'All Day Event 2',
-                    start: new Date(y, m, d - 2),
-                    end: new Date(y, m, d - 1),
-                    resourceId: '9665d732-7f56-e711-80f1-c4346bad526c',
-                    backgroundColor: '#3F51B5'
-                },
-                {
-                    title: 'Lunch',
-                    start: new Date(y, m, d, 12, 0),
-                    end: new Date(y, m, d, 14, 0),
-                    allDay: false,
-                    resourceId: 'e48a5ea8-ad3b-e711-80ef-c4346badc680',
-                    backgroundColor: '#3F51B5'                        
-                },
-                {
-                    title: 'All Day Event 3',
-                    start: new Date(y, m, d),
-                    resourceId: 'e48a5ea8-ad3b-e711-80ef-c4346badc680'
-                },
-                {
-                    title: 'Click for Google',
-                    start: new Date(y, m, d, 16, 0),
-                    end: new Date(y, m, d, 16, 30),
-                    allDay: false,
-                    url: 'http://google.com/',
-                    resourceId: '9665d732-7f56-e711-80f1-c4346bad526c'
-                }
-            ]
+            events: this.eventList
         };  
         
         this.calendar = wjQuery('#calendar').fullCalendar(calendarOptions);
@@ -307,10 +257,6 @@ function SylvanCalendar(){
             this.resourceList.push(newResource);
             this.calendar.fullCalendar("addResource",[newResource]);
         }); 
-
-        function addEventsList(args){
-            console.log("event list");
-        }
 
         this.prev = function(){
             this.calendar.fullCalendar('prev');
@@ -433,7 +379,7 @@ function SylvanCalendar(){
                 wjQuery( ".to-timepicker-input" ).timepicker({    
                             timeFormat: 'h:mm p',                            
                             interval: 30,                            
-                            minTime: $(".to-timepicker-input").val().split(' ')[0]+':00', 
+                            minTime: wjQuery(".to-timepicker-input").val().split(' ')[0]+':00', 
                             maxTime: '6:00pm',                            
                             dynamic: false,                            
                             dropdown: true,                            
@@ -498,11 +444,11 @@ function SylvanCalendar(){
         });
         wjQuery('.filter-header').click(function() { 
             var id = wjQuery(this).parent().attr('id');
-            let flag = $( "#"+id ).hasClass( "open" );
+            let flag = wjQuery( "#"+id ).hasClass( "open" );
             if(flag){
                 wjQuery(this).parent().children('.option-header-container').remove();
                 wjQuery('#'+id).removeClass('open');
-                $( "#"+id ).find('.filter-nav-icon').removeClass('open');
+                wjQuery( "#"+id ).find('.filter-nav-icon').removeClass('open');
             }
             else{
                 var indices = id.split('_');
@@ -524,7 +470,7 @@ function SylvanCalendar(){
                     
                 }
                 wjQuery('#'+id).addClass('open');
-                $( "#"+id ).find('.filter-nav-icon').addClass('open');
+                wjQuery( "#"+id ).find('.filter-nav-icon').addClass('open');
             }
         });   
         //Student pane and TA pane Functionality
@@ -561,44 +507,53 @@ function SylvanCalendar(){
     this.generateFilterObject = function(args){
         args[0] == undefined ? filtersObj = args : filtersObj = args[0];
         var filterArray = this.filters;
+        var eventList = this.eventList;
         wjQuery.each(filtersObj, function(key, value) {
             filterArray[key] = [];
             wjQuery.each(value, function(ke, val) {
                 if (key == 'location') {
                     filterArray[key].push( {id: val.hub_centerid, name: val.hub_centername, radio: true} );
-                    // console.log({id: val.hub_centerid, name: val.hub_centername});
                 }else if(key == 'deliveryType'){
                     filterArray[key].push( {id: val.hub_deliverytypeid, name: val.hub_name, radio: false} );
-                    // console.log({id: val.hub_deliverytypeid, name: val.hub_name});
                 }else if(key == "time"){
                     filterArray[key].push( {id: val.id, name: val.name, radio: false});
-                    // console.log({id: val.id, name: val.name});
                 }else if(key == "grade"){
-                    // console.log(val);
                     wjQuery.each(val, function(name, id){
-                        // console.log(name);
                         filterArray[key].push( {id: id, name: name, radio: false});
                     });
                 }else if(key == "subject"){
-                    // console.log(val);
                     wjQuery.each(val, function(name, id){
-                        // console.log(name);
                         filterArray[key].push( {id: id, name: name, radio: false});
                     });
                 }else if(key == "student"){
-                    // console.log(val);
-                    filterArray[key].push({id: val._hub_student_value, 
-                                        name: val['_hub_student_value@OData.Community.Display.V1.FormattedValue'], 
-                                        startTime: val['hub_start_time@OData.Community.Display.V1.FormattedValue'],
-                                        endTime: val['hub_end_time@OData.Community.Display.V1.FormattedValue'],
-                                        sessionDate:val['hub_session_date@OData.Community.Display.V1.FormattedValue'],
-                                        // resourceValue:val[''],
-                                        radio: false
-                                    });
+                    filterArray[key].push({
+                        id: val._hub_student_value, 
+                        name: val['_hub_student_value@OData.Community.Display.V1.FormattedValue'], 
+                        startTime: val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_start_time@OData.Community.Display.V1.FormattedValue'],
+                        endTime: val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_end_time@OData.Community.Display.V1.FormattedValue'],
+                        sessionDate:val['hub_session_date@OData.Community.Display.V1.FormattedValue'],
+                        resourceId:val['_hub_resourceid_value'],
+                        centerId:val['_hub_center_value'],
+                        radio: false
+                    });
+                    var sDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_start_time@OData.Community.Display.V1.FormattedValue']);
+                    var eDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_end_time@OData.Community.Display.V1.FormattedValue']);
+                    // console.log(sDate.getFullYear(), sDate.getMonth(), sDate.getDate(), sDate.getHours(), sDate.getMinutes());
+                    // console.log(eDate.getFullYear(), eDate.getMonth(), eDate.getDate(), eDate.getHours(), eDate.getMinutes());
+                    eventList.push({
+                        title:val['_hub_student_value@OData.Community.Display.V1.FormattedValue'],
+                        start:new Date(sDate.getFullYear(), sDate.getMonth(), sDate.getDate(), sDate.getHours(), sDate.getMinutes()),
+                        end:new Date(eDate.getFullYear(), eDate.getMonth(), eDate.getDate(), eDate.getHours(), sDate.getMinutes()),
+                        allDay: false,
+                        resourceId: '9665d732-7f56-e711-80f1-c4346bad526c',
+                        backgroundColor: '#333333'
+                        // url:"http://google.com/"
+                    });
                 }
-
             });
         });
         this.filters = filterArray;
+        this.eventList = eventList;
+        // console.log(this.filters);
     }
 }
