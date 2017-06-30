@@ -174,7 +174,7 @@ function SylvanCalendar(){
                     break;
                     case 'saturday':
                         obj.startTime = teacherData[i]['hub_satstarttime@OData.Community.Display.V1.FormattedValue'];
-                    break;
+                    break ;
                     case 'sunday':
                         obj.startTime = teacherData[i]['hub_sunstarttime@OData.Community.Display.V1.FormattedValue'];
                     break;
@@ -200,6 +200,10 @@ function SylvanCalendar(){
             defaultView: 'resourceDay',
             minTime:9,
             maxTime:18,
+            droppable: true,
+            drop: function(date, allDay) {
+                alert("Dropped on " + date + " with allDay=" + allDay);
+            },
             handleWindowResize:true,
             height:window.innerHeight - 60,
             slotMinutes : 30,

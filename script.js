@@ -559,6 +559,15 @@ setTimeout(function(){
     });
     sylvanCalendar.populateTAPane(teacherAvailability);
 
+    wjQuery('.teacher-container').draggable({
+    revert: true,      
+    revertDuration: 0,
+    appendTo: 'body',
+    containment: 'window',
+    scroll: false,
+    helper: 'clone'
+    });
+
 	},200);
 },500);
 
