@@ -469,6 +469,53 @@ var staff =   [
     }
   ];
 
+var teacherAvailability = 
+  [
+
+    {
+      "@odata.etag": "W/\"1482345\"",
+      "hub_enddate@OData.Community.Display.V1.FormattedValue": "6/23/2017",
+      "hub_enddate": "2017-06-23T00:00:00Z",
+      "hub_saturday@OData.Community.Display.V1.FormattedValue": "Yes",
+      "hub_saturday": true,
+      "hub_monday@OData.Community.Display.V1.FormattedValue": "Yes",
+      "hub_monday": true,
+      "hub_monstarttime@OData.Community.Display.V1.FormattedValue": "12:30 AM",
+      "hub_monstarttime": 30,
+      "hub_staffavailabilityid": "368ff4fb-3650-e711-80f1-c4346bacfbbc",
+      "_hub_staffid_value@OData.Community.Display.V1.FormattedValue": "James",
+      "_hub_staffid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_staffid",
+      "_hub_staffid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_staff",
+      "_hub_staffid_value": "60339fb2-d940-e711-80f0-c4346bad526c",
+      "hub_friday@OData.Community.Display.V1.FormattedValue": "No",
+      "hub_friday": false,
+      "hub_thursday@OData.Community.Display.V1.FormattedValue": "Yes",
+      "hub_thursday": true,
+      "hub_tuesday@OData.Community.Display.V1.FormattedValue": "No",
+      "hub_tuesday": false,
+      "hub_thurstarttime@OData.Community.Display.V1.FormattedValue": "2:00 PM",
+      "hub_thurstarttime": 840,
+      "hub_startdate@OData.Community.Display.V1.FormattedValue": "6/13/2017",
+      "hub_startdate": "2017-06-13T00:00:00Z",
+      "hub_satstarttime@OData.Community.Display.V1.FormattedValue": "11:30 PM",
+      "hub_satstarttime": 1410,
+      "hub_wednesday@OData.Community.Display.V1.FormattedValue": "No",
+      "hub_wednesday": false,
+      "astaff_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
+      "astaff_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc",
+      "astaff_x002e_hub_science@OData.Community.Display.V1.FormattedValue": "No",
+      "astaff_x002e_hub_science": false,
+      "astaff_x002e_hub_reading@OData.Community.Display.V1.FormattedValue": "Yes",
+      "astaff_x002e_hub_reading": true,
+      "astaff_x002e_hub_certifications": "Robotics Certification ",
+      "astaff_x002e_hub_writing@OData.Community.Display.V1.FormattedValue": "No",
+      "astaff_x002e_hub_writing": false,
+      "astaff_x002e_hub_math@OData.Community.Display.V1.FormattedValue": "Yes",
+      "astaff_x002e_hub_math": true,
+      "astaff_x002e_hub_robotics@OData.Community.Display.V1.FormattedValue": "Yes",
+      "astaff_x002e_hub_robotics": true
+    }
+  ];
 
 var filterObject = {
 	location: centerAvailable,
@@ -510,9 +557,10 @@ setTimeout(function(){
     wjQuery('.ta-btn').click(function(){
       sylvanCalendar.taPane();
     });
+    sylvanCalendar.populateTAPane(teacherAvailability);
 
 	},200);
-},300);
+},500);
 
 
 

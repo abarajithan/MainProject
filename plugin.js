@@ -4,12 +4,10 @@ function SylvanCalendar(){
     this.filters = Object();
 
     this.init = function(element){
-        console.log("init called");
         wjQuery('#'+element).load(window.location.protocol +"//"+window.location.host+"/WidgetCalendar/index.html");    
         this.loadLibraries();
     }
     this.loadLibraries = function(){
-        console.log("loadLibraries");
         var css_link = wjQuery("<link>", { 
             rel: "stylesheet", 
             type: "text/css", 
@@ -133,7 +131,6 @@ function SylvanCalendar(){
                 '</div>'+
             '</div>');
         wjQuery.each(this.filters, function(key, value){
-            // console.log(key);
             wjQuery('.filter-container').append(
                 '<div id="filter_'+key+'" class="filter-header-container">'+
                     '<div class="filter-header cursor">' +
@@ -146,6 +143,46 @@ function SylvanCalendar(){
         wjQuery('.filter-section').css('height',wjQuery('.filter-section').next().height() - 2 +"px");  
         wjQuery('.filter-container').css({'height':wjQuery('.filter-section').next().height() - 2 +"px","overflow-y":"auto"});
     } 
+
+    this.populateTAPane = function(teacherData){
+        var teacherArray = [];
+        var currentCalendarDate = this.calendar.fullCalendar('getDate');
+        for(var i=0;i<teacherData.length; i++){
+            if(teacherData[i].hub_+ moment(currentCalendarDate).format('dddd').toLowerCase()){
+                var obj = {
+                    name : teacherData[i]['_hub_staffid_value@OData.Community.Display.V1.FormattedValue'],
+                    id: teacherData[i]['_hub_staffid_value'],
+                    startDate : teacherData[i]['hub_startdate@OData.Community.Display.V1.FormattedValue'],
+                    endDate : teacherData[i]['hub_enddate@OData.Community.Display.V1.FormattedValue'],
+                    locationId : teacherData[i]['astaff_x002e_hub_center']
+                }
+                switch(moment(currentCalendarDate).format('dddd').toLowerCase()){
+                    case 'monday':
+                        obj.startTime = teacherData[i]['hub_monstarttime@OData.Community.Display.V1.FormattedValue'];
+                    break;
+                    case 'tuesday':
+                        obj.startTime = teacherData[i]['hub_tuestarttime@OData.Community.Display.V1.FormattedValue'];
+                    break;
+                    case 'wednesday':
+                        obj.startTime = teacherData[i]['hub_wedstarttime@OData.Community.Display.V1.FormattedValue'];
+                    break;
+                    case 'thursday':
+                        obj.startTime = teacherData[i]['hub_thurstarttime@OData.Community.Display.V1.FormattedValue'];
+                    break;
+                    case 'friday':
+                        obj.startTime = teacherData[i]['hub_fristarttime@OData.Community.Display.V1.FormattedValue'];
+                    break;
+                    case 'saturday':
+                        obj.startTime = teacherData[i]['hub_satstarttime@OData.Community.Display.V1.FormattedValue'];
+                    break;
+                    case 'sunday':
+                        obj.startTime = teacherData[i]['hub_sunstarttime@OData.Community.Display.V1.FormattedValue'];
+                    break;
+                }
+                teacherArray.push(obj);
+            }
+        }
+    }
 
     this.loadCalendar = function(){
 
@@ -560,7 +597,4 @@ function SylvanCalendar(){
         });
         this.filters = filterArray;
     }
-    
-
-
 }
