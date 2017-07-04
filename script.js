@@ -550,10 +550,10 @@ setTimeout(function(){
     wjQuery('#addAppointment').on('click', function() {
       sylvanCalendar.addAppointment();
     });
-    wjQuery('.sof-btn').click(function(){
-      sylvanCalendar.saPane();
+    wjQuery('.sof-btn,.sof-close-icon').click(function(){
+      sylvanCalendar.sofPane();
     });
-    wjQuery('.ta-btn').click(function(){
+    wjQuery('.ta-btn,.ta-close-icon').click(function(){
       sylvanCalendar.taPane();
     });
     sylvanCalendar.populateTAPane(teacherAvailability);
@@ -563,7 +563,6 @@ setTimeout(function(){
     revertDuration: 0,
     appendTo: 'body',
     containment: 'window',
-    scroll: false,
     helper: 'clone'
     });
 

@@ -180,9 +180,18 @@ function SylvanCalendar(){
                         obj.startTime = teacherData[i]['hub_sunstarttime@OData.Community.Display.V1.FormattedValue'];
                     break;
                 }
+                obj.endTime = moment(obj.startTime, 'h:mm A').add(1,'h').format('h:mm A');
                 teacherArray.push(obj);
             }
         }
+        for(var j=0;j<teacherArray.length;j++){
+            var elm =   '<div class="teacher-block"> <div class="teacher-container">'+
+                            '<div class="display-inline-block padding-right-xs">'+ teacherArray[j].name+'</div>'+
+                            '<div class="subject-identifier"></div>'+
+                            '<div>'+ teacherArray[j].startTime +' - '+ teacherArray[j].endTime +'</div>'+
+                        '</div></div>';
+            wjQuery('.ta-pane').append(elm);
+        }   
     }
 
     this.loadCalendar = function(){
@@ -481,23 +490,31 @@ function SylvanCalendar(){
         wjQuery('.sof-pane').css('overflow-y','auto'); 
         wjQuery('.ta-pane').css('overflow-y','auto'); 
         
-        this.saPane = function(){
+        this.sofPane = function(){
+            wjQuery('.sof-pane').show();
             if(taExpanded){
                 taExpanded = !taExpanded; // to change the slide
                 taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');
                 wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
             }
             sofExpanded = !sofExpanded;
+            if(sofExpanded){
+                wjQuery('.ta-pane').hide();
+            }
             sofExpanded ? wjQuery('.sof-pane').addClass('open') : wjQuery('.sof-pane').removeClass('open');
             wjQuery('.sof-pane').animate(sofExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
         }
         this.taPane = function(){
+            wjQuery('.ta-pane').show();
             if(sofExpanded){
                 sofExpanded = !sofExpanded;
                 sofExpanded ? wjQuery('.sof-pane').addClass('open') : wjQuery('.sof-pane').removeClass('open');
                 wjQuery('.sof-pane').animate(sofExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
             }
             taExpanded = !taExpanded;
+            if(taExpanded){
+                wjQuery('.sof-pane').hide();
+            }
             taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');
             wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
         }
