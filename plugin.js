@@ -3,6 +3,7 @@ function SylvanCalendar(){
     this.calendar = undefined;
     this.filters = new Object();
     this.eventList = [];
+    this.sofList = [];
 
     this.init = function(element){
         wjQuery('#'+element).load(window.location.protocol +"//"+window.location.host+"/WidgetCalendar/index.html");    
@@ -522,10 +523,10 @@ function SylvanCalendar(){
     }
 
     this.generateFilterObject = function(args){
-        args[0] == undefined ? filtersObj = args : filtersObj = args[0];
+        args[0] == undefined ? filterObj = args : filterObj = args[0];
         var filterArray = this.filters;
         var eventList = this.eventList;
-        wjQuery.each(filtersObj, function(key, value) {
+        wjQuery.each(filterObj, function(key, value) {
             filterArray[key] = [];
             wjQuery.each(value, function(ke, val) {
                 if (key == 'location') {
@@ -557,20 +558,95 @@ function SylvanCalendar(){
                     var eDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_end_time@OData.Community.Display.V1.FormattedValue']);
                     // console.log(sDate.getFullYear(), sDate.getMonth(), sDate.getDate(), sDate.getHours(), sDate.getMinutes());
                     // console.log(eDate.getFullYear(), eDate.getMonth(), eDate.getDate(), eDate.getHours(), eDate.getMinutes());
-                    eventList.push({
-                        title:val['_hub_student_value@OData.Community.Display.V1.FormattedValue'],
-                        start:new Date(sDate.getFullYear(), sDate.getMonth(), sDate.getDate(), sDate.getHours(), sDate.getMinutes()),
-                        end:new Date(eDate.getFullYear(), eDate.getMonth(), eDate.getDate(), eDate.getHours(), sDate.getMinutes()),
-                        allDay: false,
-                        resourceId: '9665d732-7f56-e711-80f1-c4346bad526c',
-                        backgroundColor: '#333333'
-                        // url:"http://google.com/"
-                    });
+                    // eventList.push({
+                    //     title:val['_hub_student_value@OData.Community.Display.V1.FormattedValue'],
+                    //     start:new Date(sDate.getFullYear(), sDate.getMonth(), sDate.getDate(), sDate.getHours(), sDate.getMinutes()),
+                    //     end:new Date(eDate.getFullYear(), eDate.getMonth(), eDate.getDate(), eDate.getHours(), sDate.getMinutes()),
+                    //     allDay: false,
+                    //     resourceId: '9665d732-7f56-e711-80f1-c4346bad526c',
+                    //     backgroundColor: '#27A0C9'
+                    //     // url:"http://google.com/"
+                    // });
                 }
             });
         });
         this.filters = filterArray;
-        this.eventList = eventList;
+        // this.eventList = eventList;
         // console.log(this.filters);
     }
+
+    this.generateEventObject = function(args, label){
+        var eventObjList = [];
+        var sofList = this.sofList;
+        if (label == "teacherSchedule") {
+            wjQuery.each(args, function(ke, val) {
+                var sDate = new Date(val['hub_start_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_start_time@OData.Community.Display.V1.FormattedValue']);
+                var eDate = new Date(val['hub_end_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_end_time@OData.Community.Display.V1.FormattedValue']);
+                eventObjList.push({
+                    id: val._hub_staff_value, 
+                    name: val["_hub_staff_value@OData.Community.Display.V1.FormattedValue"],
+                    start: sDate,
+                    end: eDate,
+                    resourceId:val['_hub_resourceid_value'],
+                    deliveryType: val['random deliveryType change it later'],
+                    locationId: val['aa_x002e_hub_center'],
+                    locationName: val['aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue'],
+                    subjectId: val['subjectId'],
+                    isConflict: false
+                });
+            });
+            return eventObjList;
+        }else if(label == "studentSession"){
+            wjQuery.each(args, function(ke, val) {
+                if (val.hasOwnProperty('_hub_resourceid_value')) {
+                    var sDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_start_time@OData.Community.Display.V1.FormattedValue']);
+                    var eDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_end_time@OData.Community.Display.V1.FormattedValue']);
+                    eventObjList.push({
+                        id: val._hub_student_value, 
+                        name: val["_hub_student_value@OData.Community.Display.V1.FormattedValue"],
+                        start: sDate,
+                        end: eDate,
+                        resourceId:val['_hub_resourceid_value'],
+                        deliveryType: val['random deliveryType change it later'],
+                        locationId: val['_hub_center_value'],
+                        locationName: val['_hub_center_value@OData.Community.Display.V1.FormattedValue']
+                    });
+                }else{
+                    sofList.push({
+                        id: val._hub_student_value, 
+                        name: val["_hub_student_value@OData.Community.Display.V1.FormattedValue"],
+                        start: sDate,
+                        end: eDate,
+                        resourceId:val['_hub_resourceid_value'],
+                        deliveryType: val['random deliveryType change it later'],
+                        locationId: val['_hub_center_value'],
+                        locationName: val['_hub_center_value@OData.Community.Display.V1.FormattedValue']
+                    });  
+                }
+            });
+            this.sofList = sofList;
+            return eventObjList;
+        }
+    }
+
+    this.populateEventObject = function(eventObject){
+        var eventList = this.eventList;
+        wjQuery.each(eventObject['teacherList'], function(teachKey, teachValue) {
+            var sDate = new Date(teachValue['hub_date@OData.Community.Display.V1.FormattedValue'] +" "+ teachValue['hub_start_time@OData.Community.Display.V1.FormattedValue']);
+            var eDate = new Date(teachValue['hub_date@OData.Community.Display.V1.FormattedValue'] +" "+ teachValue['hub_end_time@OData.Community.Display.V1.FormattedValue']);
+            eventList.push({
+                title:teachValue['name'],
+                start:teachValue['start'],
+                end:teachValue['end'],
+                allDay: false,
+                resourceId: teachValue['resourceId'],
+                // backgroundColor: '#27A0C9'
+                // url:"http://google.com/"
+            });
+        });
+        this.eventList = eventList;
+        console.log(this.eventList);
+    }
 }
+
+
