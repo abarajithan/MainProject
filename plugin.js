@@ -114,7 +114,6 @@ function SylvanCalendar(){
 
     this.calendarFilter = function(){
          this.buildFilterBody();
-        //console.log("calendarFilter loaded");
     }
 
     this.filterSlide = function(expanded){
@@ -146,11 +145,19 @@ function SylvanCalendar(){
         wjQuery('.filter-container').css({'height':wjQuery('.filter-section').next().height() - 2 +"px","overflow-y":"auto"});
     } 
 
+    this.populateSOFPane = function(studentData){
+       var sofTemplate = [];
+       for(var i=0;i<(this.calendarOptions.maxTime - this.calendarOptions.minTime);i++){
+            var elm = '<div id="student_block_'+i+'" style="height:'+ wjQuery(".fc-agenda-slots td div").height() * 2 +'px">zcvcxxc</div>';
+            wjQuery('.sof-pane').append(elm);;
+       }
+    }
+
     this.populateTAPane = function(teacherData){
         var teacherArray = [];
         var currentCalendarDate = this.calendar.fullCalendar('getDate');
         for(var i=0;i<teacherData.length; i++){
-            if(teacherData[i].hub_+ moment(currentCalendarDate).format('dddd').toLowerCase()){
+            if(teacherData[i]['hub_'+ moment(currentCalendarDate).format('dddd').toLowerCase()]){
                 var obj = {
                     name : teacherData[i]['_hub_staffid_value@OData.Community.Display.V1.FormattedValue'],
                     id: teacherData[i]['_hub_staffid_value'],
@@ -207,11 +214,11 @@ function SylvanCalendar(){
         var y = date.getFullYear();
         
        
-        var calendarOptions = {
+        this.calendarOptions = {
             header: false,
             defaultView: 'resourceDay',
             minTime:9,
-            maxTime:18,
+            maxTime:20,
             droppable: true,
             drop: function(date, allDay) {
                 alert("Dropped on " + date + " with allDay=" + allDay);
@@ -249,7 +256,7 @@ function SylvanCalendar(){
             events: this.eventList
         };  
         
-        this.calendar = wjQuery('#calendar').fullCalendar(calendarOptions);
+        this.calendar = wjQuery('#calendar').fullCalendar(this.calendarOptions);
         var currentCalendarDate = this.calendar.fullCalendar('getDate');
         wjQuery('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
         if(wjQuery('thead .fc-agenda-axis.fc-widget-header.fc-first').length){
@@ -493,6 +500,13 @@ function SylvanCalendar(){
         
         this.sofPane = function(){
             wjQuery('.sof-pane').show();
+            wjQuery("#scrollarea").scroll(function() {
+                wjQuery('.sof-pane').prop("scrollTop", this.scrollTop)
+                    .prop("scrollLeft", this.scrollLeft);
+            });
+            wjQuery('.sof-pane').on('mousewheel DOMMouseScroll touchmove', function(e) {
+                e.preventDefault();
+            }, false);
             if(taExpanded){
                 taExpanded = !taExpanded; // to change the slide
                 taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');

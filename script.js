@@ -1,6 +1,5 @@
 
 var resources =  [
-  
   {
     "@odata.etag": "W/\"1480976\"",
     "hub_name": "Area 101",
@@ -228,13 +227,12 @@ var subject = [{
 		      "ACT Prep": 16
 			}];	
 
-var student = [
-    
+var student =  [
     {
       "@odata.etag": "W/\"1428499\"",
       "hub_attendancestatus@OData.Community.Display.V1.FormattedValue": "Attended",
       "hub_attendancestatus": 0,
-      "_hub_student_value@OData.Community.Display.V1.FormattedValue": "Prasad Nidode",
+      "_hub_student_value@OData.Community.Display.V1.FormattedValue": "Raven White",
       "_hub_student_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_student",
       "_hub_student_value@Microsoft.Dynamics.CRM.lookuplogicalname": "contact",
       "_hub_student_value": "a0cb94cf-0550-e711-80f1-c4346bad526c",
@@ -262,10 +260,12 @@ var student = [
       "_hub_resourceid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_center_resources",
       "_hub_resourceid_value": "0517a2c8-1b50-e711-80f1-c4346bacfbbc",
       "hub_start_time@OData.Community.Display.V1.FormattedValue": "10:00 AM",
-      "hub_start_time": 600
+      "hub_start_time": 600,
+      "astudent_x002e_hub_grade@OData.Community.Display.V1.FormattedValue": "6",
+      "astudent_x002e_hub_grade": 8
     },
     {
-      "@odata.etag": "W/\"1428119\"",
+      "@odata.etag": "W/\"1490066\"",
       "hub_attendancestatus@OData.Community.Display.V1.FormattedValue": "Unexcused",
       "hub_attendancestatus": 2,
       "_hub_student_value@OData.Community.Display.V1.FormattedValue": "Cameron White",
@@ -276,7 +276,7 @@ var student = [
       "hub_isattended": true,
       "hub_sessiontype@OData.Community.Display.V1.FormattedValue": "Adhoc",
       "hub_sessiontype": 3,
-      "hub_end_time@OData.Community.Display.V1.FormattedValue": "11:00 AM",
+      "hub_end_time@OData.Community.Display.V1.FormattedValue": "1:30 PM",
       "hub_end_time": 810,
       "hub_session_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
       "hub_session_date": "2017-06-13",
@@ -295,17 +295,15 @@ var student = [
       "_hub_resourceid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_resourceid",
       "_hub_resourceid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_center_resources",
       "_hub_resourceid_value": "f74453af-263f-e711-80ef-c4346bacfbbc",
-      "hub_start_time@OData.Community.Display.V1.FormattedValue": "08:00 AM",
+      "hub_start_time@OData.Community.Display.V1.FormattedValue": "12:30 PM",
       "hub_start_time": 750,
       "hub_lateminutes@OData.Community.Display.V1.FormattedValue": "5",
       "hub_lateminutes": 5,
-      "_hub_enrollment_value@OData.Community.Display.V1.FormattedValue": "Raven White - Robotics Part2",
-      "_hub_enrollment_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_enrollment",
-      "_hub_enrollment_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_enrollment",
-      "_hub_enrollment_value": "1b4a67e4-1250-e711-80f1-c4346bad526c"
+      "astudent_x002e_hub_grade@OData.Community.Display.V1.FormattedValue": "6",
+      "astudent_x002e_hub_grade": 8
     },
     {
-      "@odata.etag": "W/\"1428131\"",
+      "@odata.etag": "W/\"1490081\"",
       "hub_attendancestatus@OData.Community.Display.V1.FormattedValue": "Attended",
       "hub_attendancestatus": 0,
       "_hub_student_value@OData.Community.Display.V1.FormattedValue": "Samson Lee",
@@ -337,10 +335,8 @@ var student = [
       "_hub_resourceid_value": "f74453af-263f-e711-80ef-c4346bacfbbc",
       "hub_start_time@OData.Community.Display.V1.FormattedValue": "12:30 PM",
       "hub_start_time": 750,
-      "_hub_enrollment_value@OData.Community.Display.V1.FormattedValue": "Samson Lee - Robotics Part2",
-      "_hub_enrollment_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_enrollment",
-      "_hub_enrollment_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_enrollment",
-      "_hub_enrollment_value": "d23bdb5e-1350-e711-80f1-c4346bad526c"
+      "astudent_x002e_hub_grade@OData.Community.Display.V1.FormattedValue": "College",
+      "astudent_x002e_hub_grade": 15
     }
   ];
 
@@ -633,15 +629,14 @@ setTimeout(function(){
       sylvanCalendar.taPane();
     });
     sylvanCalendar.populateTAPane(teacherAvailability);
-
+    sylvanCalendar.populateSOFPane();
     wjQuery('.teacher-container').draggable({
-    revert: true,      
-    revertDuration: 0,
-    appendTo: 'body',
-    containment: 'window',
-    helper: 'clone'
+      revert: true,      
+      revertDuration: 0,
+      appendTo: 'body',
+      containment: 'window',
+      helper: 'clone'
     });
-
 	},200);
 },500);
 
