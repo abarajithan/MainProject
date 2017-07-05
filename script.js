@@ -242,7 +242,7 @@ var student =  [
       "hub_sessiontype": 3,
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "11:00 AM",
       "hub_end_time": 660,
-      "hub_session_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/04/2017",
       "hub_session_date": "2017-06-13",
       "hub_studentsessionid": "57573006-1750-e711-80f1-c4346bacfbbc",
       "hub_late@OData.Community.Display.V1.FormattedValue": "No",
@@ -268,7 +268,7 @@ var student =  [
       "@odata.etag": "W/\"1490066\"",
       "hub_attendancestatus@OData.Community.Display.V1.FormattedValue": "Unexcused",
       "hub_attendancestatus": 2,
-      "_hub_student_value@OData.Community.Display.V1.FormattedValue": "Cameron White",
+      "_hub_student_value@OData.Community.Display.V1.FormattedValue": "Raven White",
       "_hub_student_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_student",
       "_hub_student_value@Microsoft.Dynamics.CRM.lookuplogicalname": "contact",
       "_hub_student_value": "a0cb94cf-0550-e711-80f1-c4346bad526c",
@@ -278,7 +278,7 @@ var student =  [
       "hub_sessiontype": 3,
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "1:30 PM",
       "hub_end_time": 810,
-      "hub_session_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/04/2017",
       "hub_session_date": "2017-06-13",
       "hub_studentsessionid": "917ea5cf-1750-e711-80f1-c4346bacfbbc",
       "hub_late@OData.Community.Display.V1.FormattedValue": "Yes",
@@ -316,7 +316,7 @@ var student =  [
       "hub_sessiontype": 3,
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "1:30 PM",
       "hub_end_time": 810,
-      "hub_session_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/04/2017",
       "hub_session_date": "2017-06-13",
       "hub_studentsessionid": "8968c9ce-1850-e711-80f1-c4346bacfbbc",
       "hub_late@OData.Community.Display.V1.FormattedValue": "No",
@@ -351,13 +351,13 @@ var teacherSchedule = [
       "hub_staff_scheduleid": "94c89f23-2250-e711-80f1-c4346bacfbbc",
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "11:00 AM",
       "hub_end_time": 660,
-      "hub_end_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_end_date": "2017-06-13",
       "hub_start_time@OData.Community.Display.V1.FormattedValue": "10:00 AM",
       "hub_start_time": 600,
-      "hub_start_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_start_date": "2017-06-13",
-      "hub_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_date": "2017-06-13",
       "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
       "_hub_resourceid_value": "0517a2c8-1b50-e711-80f1-c4346bacfbbc",
@@ -372,13 +372,13 @@ var teacherSchedule = [
       "hub_staff_scheduleid": "710ba12f-2250-e711-80f1-c4346bacfbbc",
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "4:00 PM",
       "hub_end_time": 960,
-      "hub_end_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_end_date": "2017-06-14",
       "hub_start_time@OData.Community.Display.V1.FormattedValue": "3:00 PM",
       "hub_start_time": 900,
-      "hub_start_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_start_date": "2017-06-14",
-      "hub_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_date": "2017-06-14",
       "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
       "_hub_resourceid_value": "f74453af-263f-e711-80ef-c4346bacfbbc",
@@ -393,13 +393,13 @@ var teacherSchedule = [
       "hub_staff_scheduleid": "959a0a3a-2250-e711-80f1-c4346bacfbbc",
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "1:30 PM",
       "hub_end_time": 810,
-      "hub_end_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_end_date": "2017-06-18",
       "hub_start_time@OData.Community.Display.V1.FormattedValue": "12:30 PM",
       "hub_start_time": 750,
-      "hub_start_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_start_date": "2017-06-18",
-      "hub_date@OData.Community.Display.V1.FormattedValue": "7/03/2017",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_date": "2017-06-18",
       "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
       "_hub_resourceid_value": "0517a2c8-1b50-e711-80f1-c4346bacfbbc",
@@ -593,20 +593,19 @@ var filterObject = {
 
 setTimeout(function(){
 	var sylvanCalendar = new SylvanCalendar();
-	var eventObject = {
-		teacherList: sylvanCalendar.generateEventObject(teacherSchedule, "teacherSchedule"),
-		studentList: sylvanCalendar.generateEventObject(student, "studentSession")
-	}
 	sylvanCalendar.init("widget-calendar");
 	sylvanCalendar.generateFilterObject(filterObject);
-	sylvanCalendar.populateEventObject(eventObject);
-	
 	setTimeout(function(){
 		var resourceId = sylvanCalendar.populateLocation(locations);
 		function fetchResources(resourceId){
 			sylvanCalendar.populateResource(resources);
 		}
 		fetchResources(resourceId);
+		var eventObject = {
+			teacherList: sylvanCalendar.generateEventObject(teacherSchedule, "teacherSchedule"),
+			studentList: sylvanCalendar.generateEventObject(student, "studentSession")
+		}
+		sylvanCalendar.populateEventObject(eventObject);
     wjQuery('.prevBtn').bind('click',function(){
       sylvanCalendar.prev();
     });

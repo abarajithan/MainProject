@@ -612,30 +612,24 @@ function SylvanCalendar(){
             return eventObjList;
         }else if(label == "studentSession"){
             wjQuery.each(args, function(ke, val) {
+                var sDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_start_time@OData.Community.Display.V1.FormattedValue']);
+                var eDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_end_time@OData.Community.Display.V1.FormattedValue']);
+                var obj = {
+                    id: val._hub_student_value, 
+                    name: val["_hub_student_value@OData.Community.Display.V1.FormattedValue"],
+                    start: sDate,
+                    end: eDate,
+                    gradeId:val['astudent_x002e_hub_grade'],
+                    grade: val['astudent_x002e_hub_grade@OData.Community.Display.V1.FormattedValue'],
+                    deliveryType: val['random deliveryType change it later'],
+                    locationId: val['_hub_center_value'],
+                    locationName: val['_hub_center_value@OData.Community.Display.V1.FormattedValue']
+                }
                 if (val.hasOwnProperty('_hub_resourceid_value')) {
-                    var sDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_start_time@OData.Community.Display.V1.FormattedValue']);
-                    var eDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_end_time@OData.Community.Display.V1.FormattedValue']);
-                    eventObjList.push({
-                        id: val._hub_student_value, 
-                        name: val["_hub_student_value@OData.Community.Display.V1.FormattedValue"],
-                        start: sDate,
-                        end: eDate,
-                        resourceId:val['_hub_resourceid_value'],
-                        deliveryType: val['random deliveryType change it later'],
-                        locationId: val['_hub_center_value'],
-                        locationName: val['_hub_center_value@OData.Community.Display.V1.FormattedValue']
-                    });
+                    obj.resourceId = val['_hub_resourceid_value']; 
+                    eventObjList.push(obj);
                 }else{
-                    sofList.push({
-                        id: val._hub_student_value, 
-                        name: val["_hub_student_value@OData.Community.Display.V1.FormattedValue"],
-                        start: sDate,
-                        end: eDate,
-                        resourceId:val['_hub_resourceid_value'],
-                        deliveryType: val['random deliveryType change it later'],
-                        locationId: val['_hub_center_value'],
-                        locationName: val['_hub_center_value@OData.Community.Display.V1.FormattedValue']
-                    });  
+                    sofList.push(obj);  
                 }
             });
             this.sofList = sofList;
@@ -645,21 +639,47 @@ function SylvanCalendar(){
 
     this.populateEventObject = function(eventObject){
         var eventList = this.eventList;
-        wjQuery.each(eventObject['teacherList'], function(teachKey, teachValue) {
-            var sDate = new Date(teachValue['hub_date@OData.Community.Display.V1.FormattedValue'] +" "+ teachValue['hub_start_time@OData.Community.Display.V1.FormattedValue']);
-            var eDate = new Date(teachValue['hub_date@OData.Community.Display.V1.FormattedValue'] +" "+ teachValue['hub_end_time@OData.Community.Display.V1.FormattedValue']);
+        var calendar = this.calendar;
+        wjQuery.each(eventObject['teacherList'], function(key, value) {
             eventList.push({
-                title:teachValue['name'],
-                start:teachValue['start'],
-                end:teachValue['end'],
+                id: value['resourceId']+value['start'],
+                title:value['name'],
+                start:value['start'],
+                end:value['end'],
                 allDay: false,
-                resourceId: teachValue['resourceId'],
+                resourceId: value['resourceId'],
                 // backgroundColor: '#27A0C9'
                 // url:"http://google.com/"
             });
         });
         this.eventList = eventList;
+        calendar.fullCalendar('refetchEvents');
+        this.populateStudentEventObject(eventObject['studentList']);
+    }
+
+    this.populateStudentEventObject = function(studentList){
+        var eventList = this.eventList;
+        var calendar = this.calendar;
+        wjQuery.each(studentList, function(key, value) {
+            teacherEvent = calendar.fullCalendar('clientEvents', value['resourceId']+value['start']);
+            if(teacherEvent.length){
+                console.log(teacherEvent.title);
+            }else{
+                eventList.push({
+                    id: value['resourceId']+value['start'],
+                    title:value['name'],
+                    start:value['start'],
+                    end:value['end'],
+                    allDay: false,
+                    resourceId: value['resourceId'],
+                    // backgroundColor: '#27A0C9'
+                    // url:"http://google.com/"
+                });
+            }
+        });
+        this.eventList = eventList;
         console.log(this.eventList);
+        calendar.fullCalendar('refetchEvents');
     }
 }
 
