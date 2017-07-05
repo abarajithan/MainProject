@@ -109,11 +109,6 @@ var locations =  [
     }
   ];
 
-  var options = {
-    location : locations
-  };
-
-
 var deliveryType = [
 
     {
@@ -242,7 +237,7 @@ var student =  [
       "hub_sessiontype": 3,
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "11:00 AM",
       "hub_end_time": 660,
-      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/04/2017",
+      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_session_date": "2017-06-13",
       "hub_studentsessionid": "57573006-1750-e711-80f1-c4346bacfbbc",
       "hub_late@OData.Community.Display.V1.FormattedValue": "No",
@@ -258,17 +253,19 @@ var student =  [
       "_hub_resourceid_value@OData.Community.Display.V1.FormattedValue": "Table GI",
       "_hub_resourceid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_resourceid",
       "_hub_resourceid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_center_resources",
-      "_hub_resourceid_value": "0517a2c8-1b50-e711-80f1-c4346bacfbbc",
+      "_hub_resourceid_value": "9665d732-7f56-e711-80f1-c4346bad526c",
       "hub_start_time@OData.Community.Display.V1.FormattedValue": "10:00 AM",
       "hub_start_time": 600,
       "astudent_x002e_hub_grade@OData.Community.Display.V1.FormattedValue": "6",
-      "astudent_x002e_hub_grade": 8
+      "astudent_x002e_hub_grade": 8,
+      "hub_deliverytypeid": "d6c706eb-a534-e711-80ed-c4346bad526c",
+      "hub_name": "Personal Instruction"
     },
     {
       "@odata.etag": "W/\"1490066\"",
       "hub_attendancestatus@OData.Community.Display.V1.FormattedValue": "Unexcused",
       "hub_attendancestatus": 2,
-      "_hub_student_value@OData.Community.Display.V1.FormattedValue": "Raven White",
+      "_hub_student_value@OData.Community.Display.V1.FormattedValue": "Nicholas Chan",
       "_hub_student_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_student",
       "_hub_student_value@Microsoft.Dynamics.CRM.lookuplogicalname": "contact",
       "_hub_student_value": "a0cb94cf-0550-e711-80f1-c4346bad526c",
@@ -278,7 +275,7 @@ var student =  [
       "hub_sessiontype": 3,
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "1:30 PM",
       "hub_end_time": 810,
-      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/04/2017",
+      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_session_date": "2017-06-13",
       "hub_studentsessionid": "917ea5cf-1750-e711-80f1-c4346bacfbbc",
       "hub_late@OData.Community.Display.V1.FormattedValue": "Yes",
@@ -300,7 +297,9 @@ var student =  [
       "hub_lateminutes@OData.Community.Display.V1.FormattedValue": "5",
       "hub_lateminutes": 5,
       "astudent_x002e_hub_grade@OData.Community.Display.V1.FormattedValue": "6",
-      "astudent_x002e_hub_grade": 8
+      "astudent_x002e_hub_grade": 8,
+      "hub_deliverytypeid": "d6493b3e-4e35-e711-80ed-c4346bad526c",
+      "hub_name": "Group Facilitation"
     },
     {
       "@odata.etag": "W/\"1490081\"",
@@ -316,7 +315,7 @@ var student =  [
       "hub_sessiontype": 3,
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "1:30 PM",
       "hub_end_time": 810,
-      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/04/2017",
+      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_session_date": "2017-06-13",
       "hub_studentsessionid": "8968c9ce-1850-e711-80f1-c4346bacfbbc",
       "hub_late@OData.Community.Display.V1.FormattedValue": "No",
@@ -336,7 +335,10 @@ var student =  [
       "hub_start_time@OData.Community.Display.V1.FormattedValue": "12:30 PM",
       "hub_start_time": 750,
       "astudent_x002e_hub_grade@OData.Community.Display.V1.FormattedValue": "College",
-      "astudent_x002e_hub_grade": 15
+      "astudent_x002e_hub_grade": 15,
+      "@odata.etag": "W/\"1084800\"",
+      "hub_deliverytypeid": "d6493b3e-4e35-e711-80ed-c4346bad526c",
+      "hub_name": "Group Facilitation"
     }
   ];
 
@@ -360,8 +362,10 @@ var teacherSchedule = [
       "hub_date@OData.Community.Display.V1.FormattedValue": "07/05/2017",
       "hub_date": "2017-06-13",
       "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
-      "_hub_resourceid_value": "0517a2c8-1b50-e711-80f1-c4346bacfbbc",
-      "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc"
+      "_hub_resourceid_value": "9665d732-7f56-e711-80f1-c4346bad526c",
+      "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc",
+      "hub_deliverytypeid": "d6c706eb-a534-e711-80ed-c4346bad526c",
+      "hub_name": "Personal Instruction"
     },
     {
       "@odata.etag": "W/\"1429025\"",
@@ -382,7 +386,9 @@ var teacherSchedule = [
       "hub_date": "2017-06-14",
       "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
       "_hub_resourceid_value": "f74453af-263f-e711-80ef-c4346bacfbbc",
-      "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc"
+      "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc",
+      "hub_deliverytypeid": "d6c706eb-a534-e711-80ed-c4346bad526c",
+      "hub_name": "Group Facilitation"
     },
     {
       "@odata.etag": "W/\"1429692\"",
@@ -403,7 +409,9 @@ var teacherSchedule = [
       "hub_date": "2017-06-18",
       "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
       "_hub_resourceid_value": "0517a2c8-1b50-e711-80f1-c4346bacfbbc",
-      "aa_x002e_hub_center": "a63c15a8-1b50-e711-80f1-c4346bacfbbc"
+      "aa_x002e_hub_center": "a63c15a8-1b50-e711-80f1-c4346bacfbbc",
+      "hub_deliverytypeid": "d6c706eb-a534-e711-80ed-c4346bad526c",
+      "hub_name": "Group Facilitation"
     }
   ];
 
@@ -582,9 +590,9 @@ var teacherAvailability =
 
 
 var filterObject = {
-	location: centerAvailable,
+	// location: centerAvailable,
 	time: time,
-	deliveryType: deliveryType,
+	// deliveryType: deliveryType,
 	student: student,
 	grade: grade,
 	subject: subject
@@ -601,11 +609,8 @@ setTimeout(function(){
 			sylvanCalendar.populateResource(resources);
 		}
 		fetchResources(resourceId);
-		var eventObject = {
-			teacherList: sylvanCalendar.generateEventObject(teacherSchedule, "teacherSchedule"),
-			studentList: sylvanCalendar.generateEventObject(student, "studentSession")
-		}
-		sylvanCalendar.populateEventObject(eventObject);
+		sylvanCalendar.populateTeacherEvent(sylvanCalendar.generateEventObject(teacherSchedule, "teacherSchedule"));
+		sylvanCalendar.populateStudentEvent(sylvanCalendar.generateEventObject(student, "studentSession"));
     wjQuery('.prevBtn').bind('click',function(){
       sylvanCalendar.prev();
     });

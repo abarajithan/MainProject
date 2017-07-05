@@ -20,6 +20,13 @@ function SylvanCalendar(){
         css_link = wjQuery("<link>", { 
             rel: "stylesheet", 
             type: "text/css", 
+            href: window.location.protocol +"//"+window.location.host+"/WidgetCalendar/css/SylCalDef.css" 
+        });
+        css_link.appendTo('head'); 
+
+        css_link = wjQuery("<link>", { 
+            rel: "stylesheet", 
+            type: "text/css", 
             href: window.location.protocol +"//"+window.location.host+"/WidgetCalendar/css/jquery/jquery-ui-1.8.23.css" 
         });
         css_link.appendTo('head'); 
@@ -568,25 +575,9 @@ function SylvanCalendar(){
                         centerId:val['_hub_center_value'],
                         radio: false
                     });
-                    var sDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_start_time@OData.Community.Display.V1.FormattedValue']);
-                    var eDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_end_time@OData.Community.Display.V1.FormattedValue']);
-                    // console.log(sDate.getFullYear(), sDate.getMonth(), sDate.getDate(), sDate.getHours(), sDate.getMinutes());
-                    // console.log(eDate.getFullYear(), eDate.getMonth(), eDate.getDate(), eDate.getHours(), eDate.getMinutes());
-                    // eventList.push({
-                    //     title:val['_hub_student_value@OData.Community.Display.V1.FormattedValue'],
-                    //     start:new Date(sDate.getFullYear(), sDate.getMonth(), sDate.getDate(), sDate.getHours(), sDate.getMinutes()),
-                    //     end:new Date(eDate.getFullYear(), eDate.getMonth(), eDate.getDate(), eDate.getHours(), sDate.getMinutes()),
-                    //     allDay: false,
-                    //     resourceId: '9665d732-7f56-e711-80f1-c4346bad526c',
-                    //     backgroundColor: '#27A0C9'
-                    //     // url:"http://google.com/"
-                    // });
                 }
             });
         });
-        this.filters = filterArray;
-        // this.eventList = eventList;
-        // console.log(this.filters);
     }
 
     this.generateEventObject = function(args, label){
@@ -602,14 +593,13 @@ function SylvanCalendar(){
                     start: sDate,
                     end: eDate,
                     resourceId:val['_hub_resourceid_value'],
-                    deliveryType: val['random deliveryType change it later'],
+                    deliveryTypeId: val['hub_deliverytypeid'],
+                    deliveryType: val['hub_name'],
                     locationId: val['aa_x002e_hub_center'],
                     locationName: val['aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue'],
                     subjectId: val['subjectId'],
-                    isConflict: false
                 });
             });
-            return eventObjList;
         }else if(label == "studentSession"){
             wjQuery.each(args, function(ke, val) {
                 var sDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_start_time@OData.Community.Display.V1.FormattedValue']);
@@ -621,7 +611,8 @@ function SylvanCalendar(){
                     end: eDate,
                     gradeId:val['astudent_x002e_hub_grade'],
                     grade: val['astudent_x002e_hub_grade@OData.Community.Display.V1.FormattedValue'],
-                    deliveryType: val['random deliveryType change it later'],
+                    deliveryTypeId: val['hub_deliverytypeid'],
+                    deliveryType: val['hub_name'],
                     locationId: val['_hub_center_value'],
                     locationName: val['_hub_center_value@OData.Community.Display.V1.FormattedValue']
                 }
@@ -633,53 +624,78 @@ function SylvanCalendar(){
                 }
             });
             this.sofList = sofList;
-            return eventObjList;
         }
+        return eventObjList;
     }
 
-    this.populateEventObject = function(eventObject){
+    this.populateTeacherEvent = function(teacherObject){
         var eventList = this.eventList;
         var calendar = this.calendar;
-        wjQuery.each(eventObject['teacherList'], function(key, value) {
-            eventList.push({
+        wjQuery.each(teacherObject, function(key, value) {
+            var obj = {
                 id: value['resourceId']+value['start'],
-                title:value['name'],
+                title:"<b>"+value['name']+"</b>",
                 start:value['start'],
                 end:value['end'],
                 allDay: false,
                 resourceId: value['resourceId'],
-                // backgroundColor: '#27A0C9'
-                // url:"http://google.com/"
-            });
+                isTeacher: true,
+                isConflict: false,
+                textColor:"#333333",
+            }
+            if(value.deliveryTypeId == "d6c706eb-a534-e711-80ed-c4346bad526c1"){ // Group Facilitation
+                obj.backgroundColor = "#dff0d5";
+                obj.borderColor = "#7bc143";
+            }else if(value.deliveryTypeId== "f8b0e613-a534-e711-80ed-c4346bad526c"){ // Group Instruction
+                obj.backgroundColor = "#fedeb7";
+                obj.borderColor = "#f88e50";
+            }else if(value.deliveryTypeId== "d6c706eb-a534-e711-80ed-c4346bad526c"){ // Personal Instruction
+                obj.backgroundColor = "#ebf5fb";
+                obj.borderColor = "#9acaea";
+            }
+            eventList.push(obj);
         });
-        this.eventList = eventList;
         calendar.fullCalendar('refetchEvents');
-        this.populateStudentEventObject(eventObject['studentList']);
     }
 
-    this.populateStudentEventObject = function(studentList){
+    this.populateStudentEvent = function(studentList){
         var eventList = this.eventList;
         var calendar = this.calendar;
         wjQuery.each(studentList, function(key, value) {
-            teacherEvent = calendar.fullCalendar('clientEvents', value['resourceId']+value['start']);
-            if(teacherEvent.length){
-                console.log(teacherEvent.title);
+            event = calendar.fullCalendar('clientEvents', value['resourceId']+value['start']);
+            if(event.length){
+                wjQuery.each(event, function(k, v){
+                    event[k].title = "<b>"+event[k].title+"</b><br>";
+                    event[k].title += value['name']+", "+value['grade']+"<br>";
+                });
+                calendar.fullCalendar('updateEvent', event);
             }else{
-                eventList.push({
+                var obj = {
                     id: value['resourceId']+value['start'],
-                    title:value['name'],
+                    title:"<b>"+value['name']+"</b>",
                     start:value['start'],
                     end:value['end'],
                     allDay: false,
                     resourceId: value['resourceId'],
-                    // backgroundColor: '#27A0C9'
-                    // url:"http://google.com/"
-                });
+                    isTeacher: true,
+                    isConflict: false,
+                    textColor:"#333333",
+                }
+                if(value.deliveryTypeId == "d6c706eb-a534-e711-80ed-c4346bad526c1"){ // Group Facilitation
+                    obj.backgroundColor = "#333333";
+                    obj.borderColor = "#7bc143";
+                }else if(value.deliveryTypeId== "f8b0e613-a534-e711-80ed-c4346bad526c"){ // Group Instruction
+                    obj.backgroundColor = "#fedeb7";
+                    obj.borderColor = "#f88e50";
+                }else if(value.deliveryTypeId== "d6c706eb-a534-e711-80ed-c4346bad526c"){ // Personal Instruction
+                    console.log(value.deliveryTypeId);
+                    obj.backgroundColor = "#ebf5fb";
+                    obj.borderColor = "#9acaea";
+                }
+                eventList.push(obj);
+                calendar.fullCalendar('refetchEvents');
             }
         });
-        this.eventList = eventList;
-        console.log(this.eventList);
-        calendar.fullCalendar('refetchEvents');
     }
 }
 
