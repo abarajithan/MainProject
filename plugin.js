@@ -4,7 +4,7 @@ function SylvanCalendar(){
     this.filters = new Object();
     this.eventList = [];
     this.sofList = [];
-
+    this.calendarOptions = {};
     this.init = function(element){
         wjQuery('#'+element).load(window.location.protocol +"//"+window.location.host+"/WidgetCalendar/index.html");    
         this.loadLibraries();
@@ -152,12 +152,20 @@ function SylvanCalendar(){
         wjQuery('.filter-container').css({'height':wjQuery('.filter-section').next().height() - 2 +"px","overflow-y":"auto"});
     } 
 
-    this.populateSOFPane = function(studentData){
-       var sofTemplate = [];
-       for(var i=0;i<(this.calendarOptions.maxTime - this.calendarOptions.minTime);i++){
-            var elm = '<div id="student_block_'+i+'" style="height:'+ wjQuery(".fc-agenda-slots td div").height() * 2 +'px">zcvcxxc</div>';
+    this.populateSOFPane = function(studentData,minTime,maxTime){
+        var sofTemplate = [];
+        for(var i=0;i<(maxTime - minTime);i++){
+            var elm = '<div id="student_block_'+i+'" style="height:'+ wjQuery(".fc-agenda-slots td div").height() * 2 +'px"></div>';
             wjQuery('.sof-pane').append(elm);;
-       }
+        }
+        for(var i=0;i<studentData.length;i++){
+            var studentStartHour = studentData[i].start.getHours();
+            if(studentStartHour >= minTime && studentStartHour <= maxTime){
+               var studentPosition = studentStartHour - minTime;
+               var elm = '<div>'+studentData[i].name+'<span>'+studentData[i].grade+'</span></div>';
+               wjQuery('#student_block_'+studentPosition).append(elm);
+            }
+        }
     }
 
     this.populateTAPane = function(teacherData){
@@ -581,6 +589,7 @@ function SylvanCalendar(){
     }
 
     this.generateEventObject = function(args, label){
+        var t = this;
         var eventObjList = [];
         var sofList = this.sofList;
         if (label == "teacherSchedule") {
@@ -624,8 +633,11 @@ function SylvanCalendar(){
                 }
             });
             this.sofList = sofList;
-        }
-        return eventObjList;
+            setTimeout(function(){
+            if(sofList.length)
+                t.populateSOFPane(sofList,t.calendarOptions.minTime,t.calendarOptions.maxTime);
+            },800);
+            return eventObjList;
     }
 
     this.populateTeacherEvent = function(teacherObject){

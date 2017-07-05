@@ -633,7 +633,6 @@ setTimeout(function(){
       sylvanCalendar.taPane();
     });
     sylvanCalendar.populateTAPane(teacherAvailability);
-    sylvanCalendar.populateSOFPane();
     wjQuery('.teacher-container').draggable({
       revert: true,      
       revertDuration: 0,
