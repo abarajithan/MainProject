@@ -544,8 +544,8 @@ var teacherAvailability =
 
     {
       "@odata.etag": "W/\"1482345\"",
-      "hub_enddate@OData.Community.Display.V1.FormattedValue": "6/23/2017",
-      "hub_enddate": "2017-06-23T00:00:00Z",
+      "hub_enddate@OData.Community.Display.V1.FormattedValue": "7/23/2017",
+      "hub_enddate": "2017-06-23T00:00:00Z``4",
       "hub_saturday@OData.Community.Display.V1.FormattedValue": "Yes",
       "hub_saturday": true,
       "hub_monday@OData.Community.Display.V1.FormattedValue": "Yes",
@@ -569,8 +569,10 @@ var teacherAvailability =
       "hub_startdate": "2017-06-13T00:00:00Z",
       "hub_satstarttime@OData.Community.Display.V1.FormattedValue": "11:30 PM",
       "hub_satstarttime": 1410,
-      "hub_wednesday@OData.Community.Display.V1.FormattedValue": "No",
-      "hub_wednesday": false,
+      "hub_wednesday@OData.Community.Display.V1.FormattedValue": "Yes",
+      "hub_wednesday": true,
+      "hub_wedstarttime@OData.Community.Display.V1.FormattedValue": "2:00 PM",
+      "hub_wedstarttime": 840,
       "astaff_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
       "astaff_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc",
       "astaff_x002e_hub_science@OData.Community.Display.V1.FormattedValue": "No",

@@ -155,15 +155,22 @@ function SylvanCalendar(){
     this.populateSOFPane = function(studentData,minTime,maxTime){
         var sofTemplate = [];
         for(var i=0;i<(maxTime - minTime);i++){
-            var elm = '<div id="student_block_'+i+'" style="height:'+ wjQuery(".fc-agenda-slots td div").height() * 2 +'px"></div>';
+            var elm = '<div class="student-overflow" id="student_block_'+i+'" style="height:'+ wjQuery(".fc-agenda-slots td div").height() * 2 +'px"></div>';
             wjQuery('.sof-pane').append(elm);;
         }
         for(var i=0;i<studentData.length;i++){
             var studentStartHour = studentData[i].start.getHours();
             if(studentStartHour >= minTime && studentStartHour <= maxTime){
                var studentPosition = studentStartHour - minTime;
-               var elm = '<div>'+studentData[i].name+'<span>'+studentData[i].grade+'</span></div>';
+               var elm = '<div class="student-container padding-lr-xxs" type="student" value="'+studentData[i].id+'">'+studentData[i].name+',<span>'+studentData[i].grade+'</span></div>';
                wjQuery('#student_block_'+studentPosition).append(elm);
+               wjQuery('.student-container').draggable({
+                  revert: true,      
+                  revertDuration: 0,
+                  appendTo: 'body',
+                  containment: 'window',
+                  helper: 'clone'
+                });
             }
         }
     }
@@ -178,7 +185,7 @@ function SylvanCalendar(){
                     id: teacherData[i]['_hub_staffid_value'],
                     startDate : teacherData[i]['hub_startdate@OData.Community.Display.V1.FormattedValue'],
                     endDate : teacherData[i]['hub_enddate@OData.Community.Display.V1.FormattedValue'],
-                    locationId : teacherData[i]['astaff_x002e_hub_center']
+                    locationId : teacherData[i]['astaff_x002e_hub_center']  
                 }
                 switch(moment(currentCalendarDate).format('dddd').toLowerCase()){
                     case 'monday':
@@ -204,17 +211,32 @@ function SylvanCalendar(){
                     break;
                 }
                 obj.endTime = moment(obj.startTime, 'h:mm A').add(1,'h').format('h:mm A');
+                obj.startHour = moment(obj.startTime, 'A') == 'AM' ? parseInt(moment(obj.startTime, 'h:mm A').format('h')) : parseInt(moment(obj.startTime, 'h:mm A').format('h')) +12 ;
                 teacherArray.push(obj);
             }
         }
-        for(var j=0;j<teacherArray.length;j++){
-            var elm =   '<div class="teacher-block"> <div class="teacher-container">'+
-                            '<div class="display-inline-block padding-right-xs">'+ teacherArray[j].name+'</div>'+
-                            '<div class="subject-identifier"></div>'+
-                            '<div>'+ teacherArray[j].startTime +' - '+ teacherArray[j].endTime +'</div>'+
-                        '</div></div>';
+        for(var i=0;i<(this.calendarOptions.maxTime - this.calendarOptions.minTime);i++){
+            var elm = '<div class="teacher-availability" id="teacher_block_'+i+'" style="height:'+ wjQuery(".fc-agenda-slots td div").height() * 2 +'px"></div>';
             wjQuery('.ta-pane').append(elm);
-        }   
+        }
+        for(var i=0;i<teacherArray.length;i++){
+            var studentStartHour = teacherArray[i].startHour;
+            if(studentStartHour >= this.calendarOptions.minTime && studentStartHour <= this.calendarOptions.maxTime){
+               var studentPosition = studentStartHour - this.calendarOptions.minTime;
+               var elm =   '<div class="teacher-block"> <div class="teacher-container" type="student" value="'+teacherArray[i].id+'">'+
+                            '<div class="display-inline-block padding-right-xs">'+ teacherArray[i].name+'</div>'+
+                            '<div class="subject-identifier"></div>'+
+                        '</div></div>';
+               wjQuery('#teacher_block_'+studentPosition).append(elm);
+               wjQuery('.teacher-container').draggable({
+                  revert: true,      
+                  revertDuration: 0,
+                  appendTo: 'body',
+                  containment: 'window',
+                  helper: 'clone'
+                });
+            }
+        }  
     }
 
     this.loadCalendar = function(){
@@ -235,8 +257,9 @@ function SylvanCalendar(){
             minTime:9,
             maxTime:20,
             droppable: true,
-            drop: function(date, allDay) {
-                alert("Dropped on " + date + " with allDay=" + allDay);
+            drop: function(date, allDay,ev,ui,resource) {
+
+                alert("Dropped on " + date + " with allDay=" + allDay + "resourceId = "+ resource.id +" Id="+$(this).attr("value"));
             },
             handleWindowResize:true,
             height:window.innerHeight - 60,
@@ -244,7 +267,7 @@ function SylvanCalendar(){
             selectable: true,
             selectHelper: true,
             select: function(start, end, allDay, event, resourceId) {
-                var title = prompt('Event Title:');
+                //var title = prompt('Event Title:');
                 if (title) {
                     console.log("@@ adding event " + title + ", start " + start + ", end " + end + ", allDay " + allDay + ", resource " + resourceId);
                     this.calendar.fullCalendar('renderEvent',
@@ -508,8 +531,8 @@ function SylvanCalendar(){
         //Student pane and TA pane Functionality
         var sofExpanded = false;
         var taExpanded = false;
-        wjQuery('.sof-pane').css('height',wjQuery('#calendar').height() - 25 +"px"); 
-        wjQuery('.ta-pane').css('height',wjQuery('#calendar').height() - 25 +"px"); 
+        wjQuery('.sof-pane').css('height',wjQuery('#calendar').height() - 10 +"px"); 
+        wjQuery('.ta-pane').css('height',wjQuery('#calendar').height() - 10 +"px"); 
         wjQuery('.sof-pane').css('overflow-y','auto'); 
         wjQuery('.ta-pane').css('overflow-y','auto'); 
         
@@ -525,28 +548,35 @@ function SylvanCalendar(){
             if(taExpanded){
                 taExpanded = !taExpanded; // to change the slide
                 taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');
-                wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
+                wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
             }
             sofExpanded = !sofExpanded;
             if(sofExpanded){
                 wjQuery('.ta-pane').hide();
             }
             sofExpanded ? wjQuery('.sof-pane').addClass('open') : wjQuery('.sof-pane').removeClass('open');
-            wjQuery('.sof-pane').animate(sofExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
+            wjQuery('.sof-pane').animate(sofExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
         }
         this.taPane = function(){
             wjQuery('.ta-pane').show();
+             wjQuery("#scrollarea").scroll(function() {
+                wjQuery('.ta-pane').prop("scrollTop", this.scrollTop)
+                    .prop("scrollLeft", this.scrollLeft);
+            });
+            wjQuery('.ta-pane').on('mousewheel DOMMouseScroll touchmove', function(e) {
+                e.preventDefault();
+            }, false);
             if(sofExpanded){
                 sofExpanded = !sofExpanded;
                 sofExpanded ? wjQuery('.sof-pane').addClass('open') : wjQuery('.sof-pane').removeClass('open');
-                wjQuery('.sof-pane').animate(sofExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
+                wjQuery('.sof-pane').animate(sofExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
             }
             taExpanded = !taExpanded;
             if(taExpanded){
                 wjQuery('.sof-pane').hide();
             }
             taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');
-            wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'0'} : {marginRight:'-260px'},500);
+            wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
         }
     
     }
