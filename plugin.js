@@ -98,27 +98,32 @@ function SylvanCalendar(){
             locationList.push('<li><a tabindex="-1" value-id='+locationData[i].hub_centerid+' href="javascript:void(0)">'+locationData[i].hub_centername+'</a></li>');
         }
         wjQuery(".loc-dropdown ul").html(locationList);
-        wjQuery(".loc-dropdown .dropdown-menu").on('click', 'li a', function(){
-            if(wjQuery(".loc-dropdown .btn:first-child").val() != wjQuery(this).attr('value-id')){
-                wjQuery(".loc-dropdown .btn:first-child").text(wjQuery(this).text());
-                wjQuery(".loc-dropdown .btn:first-child").val(wjQuery(this).attr('value-id'));
-                this.resourceList = [];
-                return wjQuery(this).attr('value-id');
-            }
-        });
         return locationData[0].hub_centerid;
     }
 
     this.populateResource = function(args){
         var resourceData = [];
-        args[0][0] == undefined ? resourceData = args:resourceData = args[0];
-        for(var i=0;i<resourceData.length;i++){
-            this.resourceList.push({
-                name: i+1,
-                id: resourceData[i].hub_center_resourcesid
-            });
+        if(args[0] != undefined){
+            args[0][0] == undefined ? resourceData = args:resourceData = args[0];
+            for(var i=0;i<resourceData.length;i++){
+                this.resourceList.push({
+                    name: i+1,
+                    id: resourceData[i].hub_center_resourcesid
+                });
+            }
+            this.calendar == undefined ? this.loadCalendar(): this.calendar.fullCalendar('resources',this.resourceList);
         }
-        this.calendar == undefined ? this.loadCalendar(): this.calendar.fullCalendar('resources',this.resourceList);
+        else{
+            this.calendar != undefined ? wjQuery(this.calendar).removeAttr('class').html('') : undefined;
+            this.calendar = undefined;
+            this.resourceList = [];
+            this.calendar = undefined;
+            this.filters = new Object();
+            this.eventList = [];
+            this.sofList = [];
+            this.taList = [];
+            this.calendarOptions = {};
+        }
     }
 
     this.calendarFilter = function(){
@@ -307,6 +312,8 @@ function SylvanCalendar(){
         this.calendarOptions = {
             header: false,
             defaultView: 'resourceDay',
+            editable : true,
+            disableResizing : true,
             minTime:9,
             maxTime:20,
             droppable: true,

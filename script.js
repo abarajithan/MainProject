@@ -607,41 +607,57 @@ setTimeout(function(){
 	sylvanCalendar.generateFilterObject(filterObject);
 	setTimeout(function(){
 		var resourceId = sylvanCalendar.populateLocation(locations);
+    wjQuery(".loc-dropdown .dropdown-menu").on('click', 'li a', function(){
+        if(wjQuery(".loc-dropdown .btn:first-child").val() != wjQuery(this).attr('value-id')){
+            wjQuery(".loc-dropdown .btn:first-child").text(wjQuery(this).text());
+            wjQuery(".loc-dropdown .btn:first-child").val(wjQuery(this).attr('value-id'));
+            this.resourceList = [];
+            return fetchResources(wjQuery(this).attr('value-id'));
+        }
+    });
 		function fetchResources(resourceId){
-			sylvanCalendar.populateResource(resources);
-		}
-		fetchResources(resourceId);
-		sylvanCalendar.populateTeacherEvent(sylvanCalendar.generateEventObject(teacherSchedule, "teacherSchedule"));
-		sylvanCalendar.populateStudentEvent(sylvanCalendar.generateEventObject(student, "studentSession"));
-    wjQuery('.prevBtn').bind('click',function(){
-      sylvanCalendar.prev();
-    });
-    wjQuery('.nextBtn').bind('click',function(){
-      sylvanCalendar.next();
-    });
-    wjQuery('.wkView').click(function(){
-      sylvanCalendar.weekView();
-    });
-    wjQuery('.dayView').click(function(){
-      sylvanCalendar.dayView();
-    });
-    wjQuery('#addAppointment').on('click', function() {
-      sylvanCalendar.addAppointment();
-    });
-    wjQuery('.sof-btn,.sof-close-icon').click(function(){
-      sylvanCalendar.sofPane();
-    });
-    wjQuery('.ta-btn,.ta-close-icon').click(function(){
-      sylvanCalendar.taPane();
-    });
-    sylvanCalendar.populateTAPane(teacherAvailability);
-    wjQuery('.teacher-container').draggable({
-      revert: true,      
-      revertDuration: 0,
-      appendTo: 'body',
-      containment: 'window',
-      helper: 'clone'
-    });
+      var resourceList = []
+      for(var i=0;i<resources.length;i++){
+        if(resources[i]['_hub_centerid_value'] == resourceId){
+          resourceList.push(resources[i]);
+        }      
+      }
+			sylvanCalendar.populateResource(resourceList);
+      if(resourceList.length){
+        sylvanCalendar.populateTeacherEvent(sylvanCalendar.generateEventObject(teacherSchedule, "teacherSchedule"));
+        sylvanCalendar.populateStudentEvent(sylvanCalendar.generateEventObject(student, "studentSession"));
+        wjQuery('.prevBtn').bind('click',function(){
+          sylvanCalendar.prev();
+        });
+        wjQuery('.nextBtn').bind('click',function(){
+          sylvanCalendar.next();
+        });
+        wjQuery('.wkView').click(function(){
+          sylvanCalendar.weekView();
+        });
+        wjQuery('.dayView').click(function(){
+          sylvanCalendar.dayView();
+        });
+        wjQuery('#addAppointment').on('click', function() {
+          sylvanCalendar.addAppointment();
+        });
+        wjQuery('.sof-btn,.sof-close-icon').click(function(){
+          sylvanCalendar.sofPane();
+        });
+        wjQuery('.ta-btn,.ta-close-icon').click(function(){
+          sylvanCalendar.taPane();
+        });
+        sylvanCalendar.populateTAPane(teacherAvailability);
+        wjQuery('.teacher-container').draggable({
+          revert: true,      
+          revertDuration: 0,
+          appendTo: 'body',
+          containment: 'window',
+          helper: 'clone'
+        });
+      }
+    }
+		fetchResources(resourceId);	
 	},200);
 },500);
 
