@@ -9,6 +9,7 @@ function SylvanCalendar(){
         wjQuery('#'+element).load(window.location.protocol +"//"+window.location.host+"/WidgetCalendar/index.html");    
         this.loadLibraries();
     }
+    
     this.loadLibraries = function(){
         var css_link = wjQuery("<link>", { 
             rel: "stylesheet", 
@@ -239,6 +240,16 @@ function SylvanCalendar(){
         }  
     }
 
+    this.createEventOnDrop = function(date, allDay,ev,ui,resource) {
+        if(wjQuery(this).attr("type") == 'student'){
+
+        }
+        else if(wjQuery(this).attr("type") == 'teacher'){
+
+        }
+        alert("Dropped on " + date + " with allDay=" + allDay + "resourceId = "+ resource.id +" Id=");
+    };
+
     this.loadCalendar = function(){
 
         // assign filter object to local scope filter to avoid this conflict
@@ -257,15 +268,7 @@ function SylvanCalendar(){
             minTime:9,
             maxTime:20,
             droppable: true,
-            drop: function(date, allDay,ev,ui,resource) {
-                if($(this).attr("type") == 'student'){
-
-                }
-                else if($(this).attr("type") == 'teacher'){
-
-                }
-                alert("Dropped on " + date + " with allDay=" + allDay + "resourceId = "+ resource.id +" Id="+);
-            },
+            drop: this.createEventOnDrop,
             handleWindowResize:true,
             height:window.innerHeight - 60,
             slotMinutes : 30,
@@ -582,8 +585,7 @@ function SylvanCalendar(){
             }
             taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');
             wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
-        }
-    
+        }  
     }
 
     this.generateFilterObject = function(args){
