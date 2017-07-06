@@ -685,7 +685,7 @@ function SylvanCalendar(){
                 isConflict: false,
                 textColor:"#333333",
             }
-            if(value.deliveryTypeId == "d6c706eb-a534-e711-80ed-c4346bad526c1"){ // Group Facilitation
+            if(value.deliveryTypeId == "d6493b3e-4e35-e711-80ed-c4346bad526c"){ // Group Facilitation
                 obj.backgroundColor = "#dff0d5";
                 obj.borderColor = "#7bc143";
             }else if(value.deliveryTypeId== "f8b0e613-a534-e711-80ed-c4346bad526c"){ // Group Instruction
@@ -723,14 +723,13 @@ function SylvanCalendar(){
                     isConflict: false,
                     textColor:"#333333",
                 }
-                if(value.deliveryTypeId == "d6c706eb-a534-e711-80ed-c4346bad526c1"){ // Group Facilitation
-                    obj.backgroundColor = "#333333";
+                if(value.deliveryTypeId == "d6493b3e-4e35-e711-80ed-c4346bad526c"){ // Group Facilitation
+                    obj.backgroundColor = "#dff0d5";
                     obj.borderColor = "#7bc143";
                 }else if(value.deliveryTypeId== "f8b0e613-a534-e711-80ed-c4346bad526c"){ // Group Instruction
                     obj.backgroundColor = "#fedeb7";
                     obj.borderColor = "#f88e50";
                 }else if(value.deliveryTypeId== "d6c706eb-a534-e711-80ed-c4346bad526c"){ // Personal Instruction
-                    console.log(value.deliveryTypeId);
                     obj.backgroundColor = "#ebf5fb";
                     obj.borderColor = "#9acaea";
                 }
