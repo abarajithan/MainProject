@@ -258,8 +258,13 @@ function SylvanCalendar(){
             maxTime:20,
             droppable: true,
             drop: function(date, allDay,ev,ui,resource) {
+                if($(this).attr("type") == 'student'){
 
-                alert("Dropped on " + date + " with allDay=" + allDay + "resourceId = "+ resource.id +" Id="+$(this).attr("value"));
+                }
+                else if($(this).attr("type") == 'teacher'){
+
+                }
+                alert("Dropped on " + date + " with allDay=" + allDay + "resourceId = "+ resource.id +" Id="+);
             },
             handleWindowResize:true,
             height:window.innerHeight - 60,
@@ -664,15 +669,18 @@ function SylvanCalendar(){
             });
             this.sofList = sofList;
             setTimeout(function(){
-            if(sofList.length)
-                t.populateSOFPane(sofList,t.calendarOptions.minTime,t.calendarOptions.maxTime);
+                if(sofList.length){
+                    t.populateSOFPane(sofList,t.calendarOptions.minTime,t.calendarOptions.maxTime);
+                }
             },800);
-            return eventObjList;
+        }
+        return eventObjList;
     }
 
     this.populateTeacherEvent = function(teacherObject){
         var eventList = this.eventList;
         var calendar = this.calendar;
+        console.log(teacherObject);
         wjQuery.each(teacherObject, function(key, value) {
             var obj = {
                 id: value['resourceId']+value['start'],
