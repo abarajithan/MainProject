@@ -4,6 +4,7 @@ function SylvanCalendar(){
     this.filters = new Object();
     this.eventList = [];
     this.sofList = [];
+    this.taList = [];
     this.calendarOptions = {};
     this.init = function(element){
         wjQuery('#'+element).load(window.location.protocol +"//"+window.location.host+"/WidgetCalendar/index.html");    
@@ -177,7 +178,7 @@ function SylvanCalendar(){
     }
 
     this.populateTAPane = function(teacherData){
-        var teacherArray = [];
+        var teacherArray = this.taList;
         var currentCalendarDate = this.calendar.fullCalendar('getDate');
         for(var i=0;i<teacherData.length; i++){
             if(teacherData[i]['hub_'+ moment(currentCalendarDate).format('dddd').toLowerCase()]){
@@ -186,7 +187,8 @@ function SylvanCalendar(){
                     id: teacherData[i]['_hub_staffid_value'],
                     startDate : teacherData[i]['hub_startdate@OData.Community.Display.V1.FormattedValue'],
                     endDate : teacherData[i]['hub_enddate@OData.Community.Display.V1.FormattedValue'],
-                    locationId : teacherData[i]['astaff_x002e_hub_center']  
+                    locationId : teacherData[i]['astaff_x002e_hub_center'] ,
+                    deliveryTypeId : teacherData[i]['_hub_deliverytype_value']
                 }
                 switch(moment(currentCalendarDate).format('dddd').toLowerCase()){
                     case 'monday':
@@ -216,6 +218,7 @@ function SylvanCalendar(){
                 teacherArray.push(obj);
             }
         }
+        this.taList = teacherArray;
         for(var i=0;i<(this.calendarOptions.maxTime - this.calendarOptions.minTime);i++){
             var elm = '<div class="teacher-availability" id="teacher_block_'+i+'" style="height:'+ wjQuery(".fc-agenda-slots td div").height() * 2 +'px"></div>';
             wjQuery('.ta-pane').append(elm);
@@ -224,7 +227,7 @@ function SylvanCalendar(){
             var studentStartHour = teacherArray[i].startHour;
             if(studentStartHour >= this.calendarOptions.minTime && studentStartHour <= this.calendarOptions.maxTime){
                var studentPosition = studentStartHour - this.calendarOptions.minTime;
-               var elm =   '<div class="teacher-block"> <div class="teacher-container" type="student" value="'+teacherArray[i].id+'">'+
+               var elm =   '<div class="teacher-block"> <div class="teacher-container" type="teacher" value="'+teacherArray[i].id+'">'+
                             '<div class="display-inline-block padding-right-xs">'+ teacherArray[i].name+'</div>'+
                             '<div class="subject-identifier"></div>'+
                         '</div></div>';
@@ -240,21 +243,60 @@ function SylvanCalendar(){
         }  
     }
 
-    this.createEventOnDrop = function(date, allDay,ev,ui,resource) {
-        if(wjQuery(this).attr("type") == 'student'){
-
+    this.createEventOnDrop = function(t,date, allDay,ev,ui,resource,elm) {
+        if(wjQuery(elm).attr("type") == 'student'){
+            var endDate = new Date(date);
+            var stuId = wjQuery(elm).attr("value"); 
+            var student = t.sofList.map(function(x){
+                if(x.id == stuId){
+                    return x;
+                }
+            }); 
+            var index = t.sofList.map(function(x){
+                    return x.id;
+            }).indexOf(stuId);
+            t.sofList.splice(index,1);
+            if(student){
+                elm.remove(); 
+                student[0].start = date;
+                student[0].end = new Date(endDate.setHours(endDate.getHours() + 1));
+                student[0].resourceId = resource.id;
+                t.populateStudentEvent(student);
+            }          
         }
-        else if(wjQuery(this).attr("type") == 'teacher'){
-
+        else if(wjQuery(elm).attr("type") == 'teacher'){
+            var endDate = new Date(date);
+            var teacherId = wjQuery(elm).attr("value"); 
+            var teacher = t.taList.map(function(x){
+                if(x.id == teacherId){
+                    return x;
+                }
+            }); 
+            var index = t.taList.map(function(x){
+                    return x.id;
+            }).indexOf(teacherId);
+            t.taList.splice(index,1);
+            if(teacher){
+                elm.remove(); 
+                var teacherObj = {
+                    id: teacher[0].id, 
+                    name: teacher[0].name,
+                    start: date,
+                    end: new Date(endDate.setHours(endDate.getHours() + 1)),
+                    resourceId:resource.id,
+                    deliveryTypeId: teacher[0].deliveryTypeId,
+                    locationId: teacher[0].locationId,
+                };
+                t.populateTeacherEvent([teacherObj]);
+            } 
         }
-        alert("Dropped on " + date + " with allDay=" + allDay + "resourceId = "+ resource.id +" Id=");
     };
 
     this.loadCalendar = function(){
 
         // assign filter object to local scope filter to avoid this conflict
         var filters = this.filters;
-
+        var t = this;
         var date = new Date();
         
         var d = date.getDate();
@@ -268,7 +310,9 @@ function SylvanCalendar(){
             minTime:9,
             maxTime:20,
             droppable: true,
-            drop: this.createEventOnDrop,
+            drop: function(date, allDay,ev,ui,resource){
+                t.createEventOnDrop(t,date, allDay,ev,ui,resource,this);
+            },
             handleWindowResize:true,
             height:window.innerHeight - 60,
             slotMinutes : 30,
@@ -643,7 +687,7 @@ function SylvanCalendar(){
                     deliveryType: val['hub_name'],
                     locationId: val['aa_x002e_hub_center'],
                     locationName: val['aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue'],
-                    subjectId: val['subjectId'],
+                    subjectId: val['subjectId']
                 });
             });
         }else if(label == "studentSession"){
