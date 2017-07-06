@@ -6,6 +6,9 @@ function SylvanCalendar(){
     this.sofList = [];
     this.taList = [];
     this.calendarOptions = {};
+    this.convertedTeacherObj = [];
+    this.convertedStudentObj = [];
+
     this.init = function(element){
         wjQuery('#'+element).load(window.location.protocol +"//"+window.location.host+"/WidgetCalendar/index.html");    
         this.loadLibraries();
@@ -302,6 +305,7 @@ function SylvanCalendar(){
         // assign filter object to local scope filter to avoid this conflict
         var filters = this.filters;
         var t = this;
+        var self = this;
         var date = new Date();
         
         var d = date.getDate();
@@ -443,6 +447,7 @@ function SylvanCalendar(){
         wjQuery(".fc-agenda-divider.fc-widget-header").after("<div class='filter-section'></div>");
         this.calendarFilter();
         this.filterSlide(false);
+
         wjQuery('#datepicker').datepicker({
             buttonImage: window.location.protocol +"//"+window.location.host+"/WidgetCalendar/images/calendar.png",
             buttonImageOnly: true,
@@ -467,29 +472,29 @@ function SylvanCalendar(){
             setTimeout(function(){                      
                 var etime;                        
                 wjQuery(".from-timepicker-input" ).timepicker({
-                            timeFormat: 'h:mm p', 
-                            interval: 30,                            
-                            minTime: '9',                            
-                            maxTime: '6:00pm',                            
-                            startTime: '9:00',                            
-                            dynamic: false,                            
-                            dropdown: true,                            
-                            scrollbar: true,       
-                            change: function ()
-                            {                            
-                                var stime = new Date;                            
-                                stime.setMinutes(stime.getMinutes() + 30);    
-                                var hours = stime.getHours();       
-                                var minutes = stime.getMinutes();  
-                                var ampm = hours >= 12 ? 'PM' : 'AM';    
-                                hours = hours % 12;            
-                                hours = hours ? hours : 12; 
-                                minutes = minutes < 10 ? '0'+minutes : minutes; 
-                                var etime = hours + ':' + minutes + ' ' + ampm; 
-                                wjQuery(".to-timepicker-input").val(etime);  
-                                wjQuery(".to-timepicker-input").timepicker('option',{'minTime': stime.getHours()});
-                            }                        
-                        });                                   
+                    timeFormat: 'h:mm p', 
+                    interval: 30,                            
+                    minTime: '9',                            
+                    maxTime: '6:00pm',                            
+                    startTime: '9:00',                            
+                    dynamic: false,                            
+                    dropdown: true,                            
+                    scrollbar: true,       
+                    change: function ()
+                    {                            
+                        var stime = new Date;                            
+                        stime.setMinutes(stime.getMinutes() + 30);    
+                        var hours = stime.getHours();       
+                        var minutes = stime.getMinutes();  
+                        var ampm = hours >= 12 ? 'PM' : 'AM';    
+                        hours = hours % 12;            
+                        hours = hours ? hours : 12; 
+                        minutes = minutes < 10 ? '0'+minutes : minutes; 
+                        var etime = hours + ':' + minutes + ' ' + ampm; 
+                        wjQuery(".to-timepicker-input").val(etime);  
+                        wjQuery(".to-timepicker-input").timepicker('option',{'minTime': stime.getHours()});
+                    }                        
+                });                                   
                 wjQuery( ".to-timepicker-input" ).timepicker({    
                             timeFormat: 'h:mm p',                            
                             interval: 30,                            
@@ -556,6 +561,7 @@ function SylvanCalendar(){
             var location = wjQuery("#location").val();
             var notes = wjQuery("#notes").val();   
         });
+
         wjQuery('.filter-header').click(function() { 
             var id = wjQuery(this).parent().attr('id');
             let flag = wjQuery( "#"+id ).hasClass( "open" );
@@ -571,13 +577,13 @@ function SylvanCalendar(){
                     if (filters[index][i].radio) {
                         wjQuery('#'+id).append('<div class="option_'+filters[index][i].id+' option-header-container">'+
                         '<label class="cursor option-title">'+
-                            '<input type="radio" name="checkbox" value="value">'+filters[index][i].name+
+                            '<input type="radio" class="filterCheckBox" name="checkbox" value="'+filters[index][i].id+'">'+filters[index][i].name+
                         '</label>'+
                     '</div>');
                     }else{
                         wjQuery('#'+id).append('<div class="option_'+filters[index][i].id+' option-header-container">'+
                         '<label class="cursor option-title">'+
-                            '<input type="checkbox" name="checkbox" value="value">'+filters[index][i].name+
+                            '<input type="checkbox" class="filterCheckBox" name="checkbox" value="'+filters[index][i].id+'">'+filters[index][i].name+
                         '</label>'+
                     '</div>');
                     }
@@ -585,8 +591,24 @@ function SylvanCalendar(){
                 }
                 wjQuery('#'+id).addClass('open');
                 wjQuery( "#"+id ).find('.filter-nav-icon').addClass('open');
+                var checkedList = [];
+                var calendar = this.calendar;
+                wjQuery(".filterCheckBox").click(function() {
+                    if(wjQuery(".filterCheckBox").is(':checked')){
+                        checkedList.push(wjQuery(this).val()); 
+                        console.log(self.filterItems(self.convertedStudentObj, wjQuery(this).val()));
+                        self.eventList = [];
+                        self.calendar.fullCalendar('refetchEvents');
+                        // self.populateTeacherEvent(self.convertedTeacherObj);
+                        // self.populateStudentEvent(self.filterItems(self.convertedStudentObj, wjQuery(this).val()));
+                    }else{
+                        console.log(self.convertedTeacherObj);
+                        console.log(self.convertedStudentObj);
+                    }
+                });
             }
         });   
+
         //Student pane and TA pane Functionality
         var sofExpanded = false;
         var taExpanded = false;
@@ -640,28 +662,27 @@ function SylvanCalendar(){
     }
 
     this.generateFilterObject = function(args){
+        var self = this;
         args[0] == undefined ? filterObj = args : filterObj = args[0];
-        var filterArray = this.filters;
-        var eventList = this.eventList;
         wjQuery.each(filterObj, function(key, value) {
-            filterArray[key] = [];
+            self.filters[key] = [];
             wjQuery.each(value, function(ke, val) {
                 if (key == 'location') {
-                    filterArray[key].push( {id: val.hub_centerid, name: val.hub_centername, radio: true} );
+                    self.filters[key].push( {id: val.hub_centerid, name: val.hub_centername, radio: true} );
                 }else if(key == 'deliveryType'){
-                    filterArray[key].push( {id: val.hub_deliverytypeid, name: val.hub_name, radio: false} );
+                    self.filters[key].push( {id: val.hub_deliverytypeid, name: val.hub_name, radio: false} );
                 }else if(key == "time"){
-                    filterArray[key].push( {id: val.id, name: val.name, radio: false});
+                    self.filters[key].push( {id: val.id, name: val.name, radio: false});
                 }else if(key == "grade"){
                     wjQuery.each(val, function(name, id){
-                        filterArray[key].push( {id: id, name: name, radio: false});
+                        self.filters[key].push( {id: id, name: name, radio: false});
                     });
                 }else if(key == "subject"){
                     wjQuery.each(val, function(name, id){
-                        filterArray[key].push( {id: id, name: name, radio: false});
+                        self.filters[key].push( {id: id, name: name, radio: false});
                     });
                 }else if(key == "student"){
-                    filterArray[key].push({
+                    self.filters[key].push({
                         id: val._hub_student_value, 
                         name: val['_hub_student_value@OData.Community.Display.V1.FormattedValue'], 
                         startTime: val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_start_time@OData.Community.Display.V1.FormattedValue'],
@@ -677,9 +698,8 @@ function SylvanCalendar(){
     }
 
     this.generateEventObject = function(args, label){
-        var t = this;
+        var self = this;
         var eventObjList = [];
-        var sofList = this.sofList;
         if (label == "teacherSchedule") {
             wjQuery.each(args, function(ke, val) {
                 var sDate = new Date(val['hub_start_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_start_time@OData.Community.Display.V1.FormattedValue']);
@@ -697,6 +717,7 @@ function SylvanCalendar(){
                     subjectId: val['subjectId']
                 });
             });
+            self.convertedTeacherObj = eventObjList;
         }else if(label == "studentSession"){
             wjQuery.each(args, function(ke, val) {
                 var sDate = new Date(val['hub_session_date@OData.Community.Display.V1.FormattedValue'] +" "+ val['hub_start_time@OData.Community.Display.V1.FormattedValue']);
@@ -717,23 +738,22 @@ function SylvanCalendar(){
                     obj.resourceId = val['_hub_resourceid_value']; 
                     eventObjList.push(obj);
                 }else{
-                    sofList.push(obj);  
+                    self.sofList.push(obj);  
                 }
             });
-            this.sofList = sofList;
             setTimeout(function(){
-                if(sofList.length){
-                    t.populateSOFPane(sofList,t.calendarOptions.minTime,t.calendarOptions.maxTime);
+                if(self.sofList.length){
+                    self.populateSOFPane(self.sofList,self.calendarOptions.minTime,self.calendarOptions.maxTime);
                 }
             },800);
+            self.convertedStudentObj = eventObjList;
         }
+
         return eventObjList;
     }
 
     this.populateTeacherEvent = function(teacherObject){
-        var eventList = this.eventList;
-        var calendar = this.calendar;
-        console.log(teacherObject);
+        var self = this;
         wjQuery.each(teacherObject, function(key, value) {
             var obj = {
                 id: value['resourceId']+value['start'],
@@ -756,31 +776,34 @@ function SylvanCalendar(){
                 obj.backgroundColor = "#ebf5fb";
                 obj.borderColor = "#9acaea";
             }
-            eventList.push(obj);
+            self.eventList.push(obj);
         });
-        calendar.fullCalendar('refetchEvents');
+        self.calendar.fullCalendar('refetchEvents');
     }
 
     this.populateStudentEvent = function(studentList){
-        var eventList = this.eventList;
-        var calendar = this.calendar;
+        var self = this;
         wjQuery.each(studentList, function(key, value) {
-            event = calendar.fullCalendar('clientEvents', value['resourceId']+value['start']);
+            event = self.calendar.fullCalendar('clientEvents', value['resourceId']+value['start']);
             if(event.length){
                 wjQuery.each(event, function(k, v){
-                    event[k].title = "<b>"+event[k].title+"</b><br>";
+                    if (value.isTeacher) {
+                        event[k].title = "<b>"+event[k].title+"</b><br>";
+                    }else{
+                        event[k].title = event[k].title+"<br>";
+                    }
                     event[k].title += value['name']+", "+value['grade']+"<br>";
                 });
-                calendar.fullCalendar('updateEvent', event);
+                self.calendar.fullCalendar('updateEvent', event);
             }else{
                 var obj = {
                     id: value['resourceId']+value['start'],
-                    title:"<b>"+value['name']+"</b>",
+                    title:value['name'],
                     start:value['start'],
                     end:value['end'],
                     allDay: false,
                     resourceId: value['resourceId'],
-                    isTeacher: true,
+                    isTeacher: false,
                     isConflict: false,
                     textColor:"#333333",
                 }
@@ -794,8 +817,16 @@ function SylvanCalendar(){
                     obj.backgroundColor = "#ebf5fb";
                     obj.borderColor = "#9acaea";
                 }
-                eventList.push(obj);
-                calendar.fullCalendar('refetchEvents');
+                self.eventList.push(obj);
+                self.calendar.fullCalendar('refetchEvents');
+            }
+        });
+    }
+
+    this.filterItems = function(Obj, filterTerm){
+        return Obj.filter(function(el) {
+            if(el.id == filterTerm){
+                return el;
             }
         });
     }
