@@ -234,14 +234,14 @@ var student =  [
       "_hub_student_value@OData.Community.Display.V1.FormattedValue": "Raven White",
       "_hub_student_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_student",
       "_hub_student_value@Microsoft.Dynamics.CRM.lookuplogicalname": "contact",
-      "_hub_student_value": "a0cb94cf-0550-e711-80f1-c4346bad526c1",
+      "_hub_student_value": "a0cb94cf-0550-e711-80f1-c4346bad526d",
       "hub_isattended@OData.Community.Display.V1.FormattedValue": "Yes",
       "hub_isattended": true,
       "hub_sessiontype@OData.Community.Display.V1.FormattedValue": "Adhoc",
       "hub_sessiontype": 3,
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "11:00 AM",
       "hub_end_time": 660,
-      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_session_date": "2017-06-13",
       "hub_studentsessionid": "57573006-1750-e711-80f1-c4346bacfbbc",
       "hub_late@OData.Community.Display.V1.FormattedValue": "No",
@@ -261,8 +261,8 @@ var student =  [
       "hub_start_time": 600,
       "astudent_x002e_hub_grade@OData.Community.Display.V1.FormattedValue": "6",
       "astudent_x002e_hub_grade": 8,
-      "hub_deliverytypeid": "d6c706eb-a534-e711-80ed-c4346bad526c",
-      "hub_name": "Personal Instruction"
+      "aproductservice_x002e_hub_deliverytype": "d6c706eb-a534-e711-80ed-c4346bad526c",
+      "aproductservice_x002e_hub_deliverytype@OData.Community.Display.V1.FormattedValue": "Personal Instruction",
     },
     {
       "@odata.etag": "W/\"1490066\"",
@@ -271,14 +271,14 @@ var student =  [
       "_hub_student_value@OData.Community.Display.V1.FormattedValue": "Nicholas Chan",
       "_hub_student_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_student",
       "_hub_student_value@Microsoft.Dynamics.CRM.lookuplogicalname": "contact",
-      "_hub_student_value": "a0cb94cf-0550-e711-80f1-c4346bad526c1",
+      "_hub_student_value": "a0cb94cf-0550-e711-80f1-c4346bad526c",
       "hub_isattended@OData.Community.Display.V1.FormattedValue": "Yes",
       "hub_isattended": true,
       "hub_sessiontype@OData.Community.Display.V1.FormattedValue": "Adhoc",
       "hub_sessiontype": 3,
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "1:30 PM",
       "hub_end_time": 810,
-      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_session_date": "2017-06-13",
       "hub_studentsessionid": "917ea5cf-1750-e711-80f1-c4346bacfbbc",
       "hub_late@OData.Community.Display.V1.FormattedValue": "Yes",
@@ -301,8 +301,8 @@ var student =  [
       "hub_lateminutes": 5,
       "astudent_x002e_hub_grade@OData.Community.Display.V1.FormattedValue": "6",
       "astudent_x002e_hub_grade": 8,
-      "hub_deliverytypeid": "d6493b3e-4e35-e711-80ed-c4346bad526c",
-      "hub_name": "Group Facilitation"
+      "aproductservice_x002e_hub_deliverytype": "d6493b3e-4e35-e711-80ed-c4346bad526c",
+      "aproductservice_x002e_hub_deliverytype@OData.Community.Display.V1.FormattedValue": "Group Facilitation"
     },
     {
       "@odata.etag": "W/\"1490081\"",
@@ -318,7 +318,7 @@ var student =  [
       "hub_sessiontype": 3,
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "1:30 PM",
       "hub_end_time": 810,
-      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_session_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_session_date": "2017-06-13",
       "hub_studentsessionid": "8968c9ce-1850-e711-80f1-c4346bacfbbc",
       "hub_late@OData.Community.Display.V1.FormattedValue": "No",
@@ -340,8 +340,8 @@ var student =  [
       "astudent_x002e_hub_grade@OData.Community.Display.V1.FormattedValue": "College",
       "astudent_x002e_hub_grade": 15,
       "@odata.etag": "W/\"1084800\"",
-      "hub_deliverytypeid": "d6493b3e-4e35-e711-80ed-c4346bad526c",
-      "hub_name": "Group Facilitation"
+      "aproductservice_x002e_hub_deliverytype": "d6493b3e-4e35-e711-80ed-c4346bad526c",
+      "aproductservice_x002e_hub_deliverytype@OData.Community.Display.V1.FormattedValue": "Group Facilitation"
     }
   ];
 
@@ -356,19 +356,19 @@ var teacherSchedule = [
       "hub_staff_scheduleid": "94c89f23-2250-e711-80f1-c4346bacfbbc",
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "11:00 AM",
       "hub_end_time": 660,
-      "hub_end_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_end_date": "2017-06-13",
       "hub_start_time@OData.Community.Display.V1.FormattedValue": "10:00 AM",
       "hub_start_time": 600,
-      "hub_start_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_start_date": "2017-06-13",
-      "hub_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_date": "2017-06-13",
       "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
       "_hub_resourceid_value": "9665d732-7f56-e711-80f1-c4346bad526c",
       "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc",
-      "hub_deliverytypeid": "d6c706eb-a534-e711-80ed-c4346bad526c",
-      "hub_name": "Personal Instruction"
+      "aproductservice_x002e_hub_deliverytype": "d6c706eb-a534-e711-80ed-c4346bad526c",
+      "aproductservice_x002e_hub_deliverytype@OData.Community.Display.V1.FormattedValue": "Personal Instruction"
     },
     {
       "@odata.etag": "W/\"1429025\"",
@@ -379,19 +379,19 @@ var teacherSchedule = [
       "hub_staff_scheduleid": "710ba12f-2250-e711-80f1-c4346bacfbbc",
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "4:00 PM",
       "hub_end_time": 960,
-      "hub_end_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_end_date": "2017-06-14",
       "hub_start_time@OData.Community.Display.V1.FormattedValue": "3:00 PM",
       "hub_start_time": 900,
-      "hub_start_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_start_date": "2017-06-14",
-      "hub_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_date": "2017-06-14",
       "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
       "_hub_resourceid_value": "f74453af-263f-e711-80ef-c4346bacfbbc",
       "aa_x002e_hub_center": "b97bc0df-a334-e711-80ed-c4346bacfbbc",
-      "hub_deliverytypeid": "f8b0e613-a534-e711-80ed-c4346bad526c",
-      "hub_name": "Group Instruction"
+      "aproductservice_x002e_hub_deliverytype": "f8b0e613-a534-e711-80ed-c4346bad526c",
+      "aproductservice_x002e_hub_deliverytype@OData.Community.Display.V1.FormattedValue": "Group Instruction"
     },
     {
       "@odata.etag": "W/\"1429692\"",
@@ -402,19 +402,19 @@ var teacherSchedule = [
       "hub_staff_scheduleid": "959a0a3a-2250-e711-80f1-c4346bacfbbc",
       "hub_end_time@OData.Community.Display.V1.FormattedValue": "1:30 PM",
       "hub_end_time": 810,
-      "hub_end_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_end_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_end_date": "2017-06-18",
       "hub_start_time@OData.Community.Display.V1.FormattedValue": "12:30 PM",
       "hub_start_time": 750,
-      "hub_start_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_start_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_start_date": "2017-06-18",
-      "hub_date@OData.Community.Display.V1.FormattedValue": "07/06/2017",
+      "hub_date@OData.Community.Display.V1.FormattedValue": "07/10/2017",
       "hub_date": "2017-06-18",
       "aa_x002e_hub_center@OData.Community.Display.V1.FormattedValue": "Bel Air Learning Center",
       "_hub_resourceid_value": "0517a2c8-1b50-e711-80f1-c4346bacfbbc",
       "aa_x002e_hub_center": "a63c15a8-1b50-e711-80f1-c4346bacfbbc",
-      "hub_deliverytypeid": "d6493b3e-4e35-e711-80ed-c4346bad526c",
-      "hub_name": "Group Facilitation"
+      "aproductservice_x002e_hub_deliverytype": "d6493b3e-4e35-e711-80ed-c4346bad526c",
+      "aproductservice_x002e_hub_deliverytype@OData.Community.Display.V1.FormattedValue": "Group Facilitation"
     }
   ];
 
