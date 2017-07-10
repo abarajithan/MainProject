@@ -13,7 +13,74 @@ function SylvanCalendar(){
         wjQuery('#'+element).load(window.location.protocol +"//"+window.location.host+"/WidgetCalendar/index.html");    
         this.loadLibraries();
     }
-    
+    //Student pane and TA pane Functionality
+    var sofExpanded = false;
+    var taExpanded = false;
+    this.loadMasterInformation = function(){
+        var currentCalendarDate = this.calendar.fullCalendar('getDate');
+        wjQuery('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
+        if(wjQuery('thead .fc-agenda-axis.fc-widget-header.fc-first').length){
+            var dayOfWeek = moment(currentCalendarDate).format('dddd');
+            var dayofMonth = moment(currentCalendarDate).format('M/D');
+            wjQuery('thead .fc-agenda-axis.fc-widget-header.fc-first').css('text-align','center');
+            wjQuery('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
+        }
+        wjQuery(".fc-agenda-divider.fc-widget-header").after("<div class='filter-section'></div>");
+        this.calendarFilter();
+        this.filterSlide(false);
+
+        wjQuery('.filter-header').click(function() { 
+            var id = wjQuery(this).parent().attr('id');
+            let flag = wjQuery( "#"+id ).hasClass( "open" );
+            if(flag){
+                wjQuery(this).parent().children('.option-header-container').remove();
+                wjQuery('#'+id).removeClass('open');
+                wjQuery( "#"+id ).find('.filter-nav-icon').removeClass('open');
+            }
+            else{
+                var indices = id.split('_');
+                var index = indices[1];
+                var filters = this.filters;
+                for(var i=0;i<filters[index].length;i++){
+                    if (filters[index][i].radio) {
+                        wjQuery('#'+id).append('<div class="option_'+filters[index][i].id+' option-header-container">'+
+                        '<label class="cursor option-title">'+
+                            '<input type="radio" class="filterCheckBox" name="checkbox" value="'+filters[index][i].id+'">'+filters[index][i].name+
+                        '</label>'+
+                    '</div>');
+                    }else{
+                        wjQuery('#'+id).append('<div class="option_'+filters[index][i].id+' option-header-container">'+
+                        '<label class="cursor option-title">'+
+                            '<input type="checkbox" class="filterCheckBox" name="checkbox" value="'+filters[index][i].id+'">'+filters[index][i].name+
+                        '</label>'+
+                    '</div>');
+                    }
+                    
+                }
+                wjQuery('#'+id).addClass('open');
+                wjQuery( "#"+id ).find('.filter-nav-icon').addClass('open');
+                var checkedList = [];
+                var calendar = this.calendar;
+                wjQuery(".filterCheckBox").click(function() {
+                    if(wjQuery(".filterCheckBox").is(':checked')){
+                        checkedList.push(wjQuery(this).val()); 
+                        console.log(self.filterItems(self.convertedStudentObj, wjQuery(this).val()));
+                        self.eventList = [];
+                        self.calendar.fullCalendar('refetchEvents');
+                        // self.populateTeacherEvent(self.convertedTeacherObj);
+                        // self.populateStudentEvent(self.filterItems(self.convertedStudentObj, wjQuery(this).val()));
+                    }else{
+                        //console.log(self.convertedTeacherObj);
+                        //console.log(self.convertedStudentObj);
+                    }
+                });
+            }
+        });
+        wjQuery('.sof-pane').css('height',wjQuery('#calendar').height() - 10 +"px"); 
+        wjQuery('.ta-pane').css('height',wjQuery('#calendar').height() - 10 +"px"); 
+        wjQuery('.sof-pane').css('overflow-y','auto'); 
+        wjQuery('.ta-pane').css('overflow-y','auto');
+    }
     this.loadLibraries = function(){
         var css_link = wjQuery("<link>", { 
             rel: "stylesheet", 
@@ -108,6 +175,7 @@ function SylvanCalendar(){
         var resourceData = [];
         if(args[0] != undefined){
             args[0][0] == undefined ? resourceData = args:resourceData = args[0];
+            this.resourceList = [];
             for(var i=0;i<resourceData.length;i++){
                 this.resourceList.push({
                     name: i+1,
@@ -115,6 +183,7 @@ function SylvanCalendar(){
                 });
             }
             this.calendar == undefined ? this.loadCalendar(): this.calendar.fullCalendar('resources',this.resourceList);
+            this.loadMasterInformation();
         }
         else{
             this.calendar != undefined ? wjQuery(this.calendar).removeAttr('class').html('') : undefined;
@@ -358,14 +427,7 @@ function SylvanCalendar(){
         };  
         
         this.calendar = wjQuery('#calendar').fullCalendar(this.calendarOptions);
-        var currentCalendarDate = this.calendar.fullCalendar('getDate');
-        wjQuery('.headerDate').text(moment(currentCalendarDate).format('MM/DD/YYYY'));
-        if(wjQuery('thead .fc-agenda-axis.fc-widget-header.fc-first').length){
-            var dayOfWeek = moment(currentCalendarDate).format('dddd');
-            var dayofMonth = moment(currentCalendarDate).format('M/D');
-            wjQuery('thead .fc-agenda-axis.fc-widget-header.fc-first').css('text-align','center');
-            wjQuery('thead .fc-agenda-axis.fc-widget-header.fc-first').html(dayOfWeek +" <br/> "+ dayofMonth);
-        }
+        this.loadMasterInformation();
 
         wjQuery("#addResource").click(function(){
             var newResource = {
@@ -444,10 +506,6 @@ function SylvanCalendar(){
             }
         }
 
-        wjQuery(".fc-agenda-divider.fc-widget-header").after("<div class='filter-section'></div>");
-        this.calendarFilter();
-        this.filterSlide(false);
-
         wjQuery('#datepicker').datepicker({
             buttonImage: window.location.protocol +"//"+window.location.host+"/WidgetCalendar/images/calendar.png",
             buttonImageOnly: true,
@@ -464,49 +522,6 @@ function SylvanCalendar(){
             }
         });
                
-        this.addAppointment = function(){
-            wjQuery("#appointmentModal").dialog({
-                modal: true 
-            });
-            wjQuery("#appointmentModal").dialog('option', 'title', 'Add New Appointment Slot');
-            setTimeout(function(){                      
-                var etime;                        
-                wjQuery(".from-timepicker-input" ).timepicker({
-                    timeFormat: 'h:mm p', 
-                    interval: 30,                            
-                    minTime: '9',                            
-                    maxTime: '6:00pm',                            
-                    startTime: '9:00',                            
-                    dynamic: false,                            
-                    dropdown: true,                            
-                    scrollbar: true,       
-                    change: function ()
-                    {                            
-                        var stime = new Date;                            
-                        stime.setMinutes(stime.getMinutes() + 30);    
-                        var hours = stime.getHours();       
-                        var minutes = stime.getMinutes();  
-                        var ampm = hours >= 12 ? 'PM' : 'AM';    
-                        hours = hours % 12;            
-                        hours = hours ? hours : 12; 
-                        minutes = minutes < 10 ? '0'+minutes : minutes; 
-                        var etime = hours + ':' + minutes + ' ' + ampm; 
-                        wjQuery(".to-timepicker-input").val(etime);  
-                        wjQuery(".to-timepicker-input").timepicker('option',{'minTime': stime.getHours()});
-                    }                        
-                });                                   
-                wjQuery( ".to-timepicker-input" ).timepicker({    
-                            timeFormat: 'h:mm p',                            
-                            interval: 30,                            
-                            minTime: wjQuery(".to-timepicker-input").val().split(' ')[0]+':00', 
-                            maxTime: '6:00pm',                            
-                            dynamic: false,                            
-                            dropdown: true,                            
-                            scrollbar: true                        
-                        });                                   
-            },300);
-        }
-
         // From date for new appointment
         wjQuery( ".from-datepicker-input" ).datepicker();
         var selectedFromDate; 
@@ -560,106 +575,93 @@ function SylvanCalendar(){
             var staff = wjQuery("#staff").val();
             var location = wjQuery("#location").val();
             var notes = wjQuery("#notes").val();   
+        });       
+    }
+    this.addAppointment = function(){
+        wjQuery("#appointmentModal").dialog({
+            modal: true 
         });
-
-        wjQuery('.filter-header').click(function() { 
-            var id = wjQuery(this).parent().attr('id');
-            let flag = wjQuery( "#"+id ).hasClass( "open" );
-            if(flag){
-                wjQuery(this).parent().children('.option-header-container').remove();
-                wjQuery('#'+id).removeClass('open');
-                wjQuery( "#"+id ).find('.filter-nav-icon').removeClass('open');
-            }
-            else{
-                var indices = id.split('_');
-                var index = indices[1];
-                for(var i=0;i<filters[index].length;i++){
-                    if (filters[index][i].radio) {
-                        wjQuery('#'+id).append('<div class="option_'+filters[index][i].id+' option-header-container">'+
-                        '<label class="cursor option-title">'+
-                            '<input type="radio" class="filterCheckBox" name="checkbox" value="'+filters[index][i].id+'">'+filters[index][i].name+
-                        '</label>'+
-                    '</div>');
-                    }else{
-                        wjQuery('#'+id).append('<div class="option_'+filters[index][i].id+' option-header-container">'+
-                        '<label class="cursor option-title">'+
-                            '<input type="checkbox" class="filterCheckBox" name="checkbox" value="'+filters[index][i].id+'">'+filters[index][i].name+
-                        '</label>'+
-                    '</div>');
-                    }
-                    
-                }
-                wjQuery('#'+id).addClass('open');
-                wjQuery( "#"+id ).find('.filter-nav-icon').addClass('open');
-                var checkedList = [];
-                var calendar = this.calendar;
-                wjQuery(".filterCheckBox").click(function() {
-                    if(wjQuery(".filterCheckBox").is(':checked')){
-                        checkedList.push(wjQuery(this).val()); 
-                        console.log(self.filterItems(self.convertedStudentObj, wjQuery(this).val()));
-                        self.eventList = [];
-                        self.calendar.fullCalendar('refetchEvents');
-                        // self.populateTeacherEvent(self.convertedTeacherObj);
-                        // self.populateStudentEvent(self.filterItems(self.convertedStudentObj, wjQuery(this).val()));
-                    }else{
-                        console.log(self.convertedTeacherObj);
-                        console.log(self.convertedStudentObj);
-                    }
-                });
-            }
-        });   
-
-        //Student pane and TA pane Functionality
-        var sofExpanded = false;
-        var taExpanded = false;
-        wjQuery('.sof-pane').css('height',wjQuery('#calendar').height() - 10 +"px"); 
-        wjQuery('.ta-pane').css('height',wjQuery('#calendar').height() - 10 +"px"); 
-        wjQuery('.sof-pane').css('overflow-y','auto'); 
-        wjQuery('.ta-pane').css('overflow-y','auto'); 
-        
-        this.sofPane = function(){
-            wjQuery('.sof-pane').show();
-            wjQuery("#scrollarea").scroll(function() {
-                wjQuery('.sof-pane').prop("scrollTop", this.scrollTop)
-                    .prop("scrollLeft", this.scrollLeft);
-            });
-            wjQuery('.sof-pane').on('mousewheel DOMMouseScroll touchmove', function(e) {
-                e.preventDefault();
-            }, false);
-            if(taExpanded){
-                taExpanded = !taExpanded; // to change the slide
-                taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');
-                wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
-            }
+        wjQuery("#appointmentModal").dialog('option', 'title', 'Add New Appointment Slot');
+        setTimeout(function(){                      
+            var etime;                        
+            wjQuery(".from-timepicker-input" ).timepicker({
+                timeFormat: 'h:mm p', 
+                interval: 30,                            
+                minTime: '9',                            
+                maxTime: '6:00pm',                            
+                startTime: '9:00',                            
+                dynamic: false,                            
+                dropdown: true,                            
+                scrollbar: true,       
+                change: function ()
+                {                            
+                    var stime = new Date;                            
+                    stime.setMinutes(stime.getMinutes() + 30);    
+                    var hours = stime.getHours();       
+                    var minutes = stime.getMinutes();  
+                    var ampm = hours >= 12 ? 'PM' : 'AM';    
+                    hours = hours % 12;            
+                    hours = hours ? hours : 12; 
+                    minutes = minutes < 10 ? '0'+minutes : minutes; 
+                    var etime = hours + ':' + minutes + ' ' + ampm; 
+                    wjQuery(".to-timepicker-input").val(etime);  
+                    wjQuery(".to-timepicker-input").timepicker('option',{'minTime': stime.getHours()});
+                }                        
+            });                                   
+            wjQuery( ".to-timepicker-input" ).timepicker({    
+                        timeFormat: 'h:mm p',                            
+                        interval: 30,                            
+                        minTime: wjQuery(".to-timepicker-input").val().split(' ')[0]+':00', 
+                        maxTime: '6:00pm',                            
+                        dynamic: false,                            
+                        dropdown: true,                            
+                        scrollbar: true                        
+                    });                                   
+        },300);
+    }
+    
+    this.sofPane = function(){
+        wjQuery('.sof-pane').show();
+        wjQuery("#scrollarea").scroll(function() {
+            wjQuery('.sof-pane').prop("scrollTop", this.scrollTop)
+                .prop("scrollLeft", this.scrollLeft);
+        });
+        wjQuery('.sof-pane').on('mousewheel DOMMouseScroll touchmove', function(e) {
+            e.preventDefault();
+        }, false);
+        if(taExpanded){
+            taExpanded = !taExpanded; // to change the slide
+            taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');
+            wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
+        }
+        sofExpanded = !sofExpanded;
+        if(sofExpanded){
+            wjQuery('.ta-pane').hide();
+        }
+        sofExpanded ? wjQuery('.sof-pane').addClass('open') : wjQuery('.sof-pane').removeClass('open');
+        wjQuery('.sof-pane').animate(sofExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
+    }
+    this.taPane = function(){
+        wjQuery('.ta-pane').show();
+         wjQuery("#scrollarea").scroll(function() {
+            wjQuery('.ta-pane').prop("scrollTop", this.scrollTop)
+                .prop("scrollLeft", this.scrollLeft);
+        });
+        wjQuery('.ta-pane').on('mousewheel DOMMouseScroll touchmove', function(e) {
+            e.preventDefault();
+        }, false);
+        if(sofExpanded){
             sofExpanded = !sofExpanded;
-            if(sofExpanded){
-                wjQuery('.ta-pane').hide();
-            }
             sofExpanded ? wjQuery('.sof-pane').addClass('open') : wjQuery('.sof-pane').removeClass('open');
             wjQuery('.sof-pane').animate(sofExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
         }
-        this.taPane = function(){
-            wjQuery('.ta-pane').show();
-             wjQuery("#scrollarea").scroll(function() {
-                wjQuery('.ta-pane').prop("scrollTop", this.scrollTop)
-                    .prop("scrollLeft", this.scrollLeft);
-            });
-            wjQuery('.ta-pane').on('mousewheel DOMMouseScroll touchmove', function(e) {
-                e.preventDefault();
-            }, false);
-            if(sofExpanded){
-                sofExpanded = !sofExpanded;
-                sofExpanded ? wjQuery('.sof-pane').addClass('open') : wjQuery('.sof-pane').removeClass('open');
-                wjQuery('.sof-pane').animate(sofExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
-            }
-            taExpanded = !taExpanded;
-            if(taExpanded){
-                wjQuery('.sof-pane').hide();
-            }
-            taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');
-            wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
-        }  
-    }
+        taExpanded = !taExpanded;
+        if(taExpanded){
+            wjQuery('.sof-pane').hide();
+        }
+        taExpanded ? wjQuery('.ta-pane').addClass('open') : wjQuery('.ta-pane').removeClass('open');
+        wjQuery('.ta-pane').animate(taExpanded?{'marginRight':'-15px'} : {marginRight:'-260px'},500);
+    } 
 
     this.generateFilterObject = function(args){
         var self = this;

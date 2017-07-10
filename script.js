@@ -52,6 +52,10 @@ var resources =  [
     "_hub_centerid_value": "b97bc0df-a334-e711-80ed-c4346bacfbbc",
     "hub_capacity@OData.Community.Display.V1.FormattedValue": "10",
     "hub_capacity": 10,
+    "_hub_deliverytype_value@OData.Community.Display.V1.FormattedValue": "Group Facilitation",
+    "_hub_deliverytype_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "hub_deliverytype",
+    "_hub_deliverytype_value@Microsoft.Dynamics.CRM.lookuplogicalname": "hub_deliverytype",
+    "_hub_deliverytype_value": "d6493b3e-4e35-e711-80ed-c4346bad526c",
     "hub_center_resourcesid": "e48a5ea8-ad3b-e711-80ef-c4346badc680"
   },
   {
@@ -602,25 +606,47 @@ var filterObject = {
 
 
 setTimeout(function(){
+  var deliveryTypeList = [];
 	var sylvanCalendar = new SylvanCalendar();
 	sylvanCalendar.init("widget-calendar");
 	sylvanCalendar.generateFilterObject(filterObject);
 	setTimeout(function(){
-		var resourceId = sylvanCalendar.populateLocation(locations);
+		var locationId = sylvanCalendar.populateLocation(locations);
+    for (var i = 0; i < deliveryType.length; i++) {
+      switch(deliveryType[i]['hub_name']){
+        case 'Personal Instruction':
+          wjQuery('#pi-btn input').val(deliveryType[i]['hub_deliverytypeid']);
+          break;
+        case 'Group Facilitation':
+          wjQuery('#gf-btn input').val(deliveryType[i]['hub_deliverytypeid']);
+          break;
+        case 'Group Instruction':
+          wjQuery('#gi-btn input').val(deliveryType[i]['hub_deliverytypeid']);
+          break;
+      }
+    }
     wjQuery(".loc-dropdown .dropdown-menu").on('click', 'li a', function(){
         if(wjQuery(".loc-dropdown .btn:first-child").val() != wjQuery(this).attr('value-id')){
-            wjQuery(".loc-dropdown .btn:first-child").text(wjQuery(this).text());
-            wjQuery(".loc-dropdown .btn:first-child").val(wjQuery(this).attr('value-id'));
-            this.resourceList = [];
-            return fetchResources(wjQuery(this).attr('value-id'));
+          wjQuery(".loc-dropdown .btn:first-child").text(wjQuery(this).text());
+          wjQuery(".loc-dropdown .btn:first-child").val(wjQuery(this).attr('value-id'));
+          this.resourceList = [];
+          return fetchResources(wjQuery(this).attr('value-id'),deliveryTypeList);
         }
     });
-		function fetchResources(resourceId){
-      var resourceList = []
-      for(var i=0;i<resources.length;i++){
-        if(resources[i]['_hub_centerid_value'] == resourceId){
-          resourceList.push(resources[i]);
-        }      
+		function fetchResources(locationId,selectedDeliveryType){
+      var resourceList = [];
+      
+      if(selectedDeliveryType.length == 0 || selectedDeliveryType.length == deliveryType.length){
+        resourceList = resources;
+      }
+      else{
+        for (var i = 0; i < selectedDeliveryType.length; i++) {
+          for(var j=0;j<resources.length;j++){
+            if(resources[j]['_hub_deliverytype_value'] == selectedDeliveryType[i]){
+              resourceList.push(resources[j]);
+            }      
+          }
+        }
       }
 			sylvanCalendar.populateResource(resourceList);
       if(resourceList.length){
@@ -657,7 +683,16 @@ setTimeout(function(){
         });
       }
     }
-		fetchResources(resourceId);	
+    wjQuery('.dtBtn').click(function() {
+      deliveryTypeList = [];
+      wjQuery.each(wjQuery('.dtBtn'), function(index,elm){
+        if(wjQuery(elm).is(':checked')){ 
+          deliveryTypeList.push(jQuery(elm).val());
+        }
+      });
+      fetchResources(locationId,deliveryTypeList);
+    });
+		fetchResources(locationId,deliveryTypeList);	
 	},200);
 },500);
 
